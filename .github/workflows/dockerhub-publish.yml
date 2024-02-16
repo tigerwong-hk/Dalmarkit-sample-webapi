@@ -1,0 +1,43 @@
+name: Docker Image Publish
+
+on:
+  workflow_dispatch:
+
+jobs:
+  Deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      APP_DOCKERFILE_PATH: "src/Dalmarkit.Sample.WebApi/Dockerfile"
+    steps:
+      - name: Only for main or develop branch
+        if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop' }}
+        uses: actions/github-script@v7
+        with:
+          script: core.setFailed('Invalid branch - ${{ github.ref }}')
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build Docker image
+        id: build-docker-image
+        env:
+          DOCKER_IMAGE_TAG: ${{ github.run_number }}-${{ github.ref_name }}
+        run: |
+          docker build --no-cache --pull -t "${{ vars.DOCKERHUB_NAMESPACE }}/${{ vars.DOCKERHUB_REPOSITORY_NAME }}:${DOCKER_IMAGE_TAG}" -f "${APP_DOCKERFILE_PATH}" .
+          echo "docker_image_tag=${DOCKER_IMAGE_TAG}" >> $GITHUB_OUTPUT
+      - name: Tag Docker image as latest for main branch
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run: |
+          docker tag "${{ vars.DOCKERHUB_NAMESPACE }}/${{ vars.DOCKERHUB_REPOSITORY_NAME }}:${{ steps.build-docker-image.outputs.docker_image_tag }}" "${{ vars.DOCKERHUB_NAMESPACE }}/${{ vars.DOCKERHUB_REPOSITORY_NAME }}:latest"
+      - name: Push Docker image to Docker hub
+        run: docker push -a "${{ vars.DOCKERHUB_NAMESPACE }}/${{ vars.DOCKERHUB_REPOSITORY_NAME }}"
+      - name: Release for main branch
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: "${{ steps.build-docker-image.outputs.docker_image_tag }}"

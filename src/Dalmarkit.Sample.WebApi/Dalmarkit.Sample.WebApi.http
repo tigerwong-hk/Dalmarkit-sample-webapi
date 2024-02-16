@@ -1,0 +1,928 @@
+############ VARIABLES
+
+######### URLs
+
+@apiUrl = {{API_URL}}
+@iamUrl = {{IAM_URL}}
+
+######### Backoffice Client
+
+@backofficeClientId = {{BACKOFFICE_CLIENT_ID}}
+@backofficeClientRedirectUrl = {{BACKOFFICE_CLIENT_REDIRECT_URL}}
+@backofficeClientScope = {{BACKOFFICE_CLIENT_SCOPE}}
+@backofficeClientUrl = {{BACKOFFICE_CLIENT_URL}}
+@backofficeLoginRequestState = {{$guid}}
+
+######### Community Client
+
+@communityClientId = {{COMMUNITY_CLIENT_ID}}
+@communityClientRedirectUrl = {{COMMUNITY_CLIENT_REDIRECT_URL}}
+@communityClientScope = {{COMMUNITY_CLIENT_SCOPE}}
+@communityClientUrl = {{COMMUNITY_CLIENT_URL}}
+@communityLoginRequestState = {{$guid}}
+
+######### Tenant Client
+
+@tenantClientId = {{TENANT_CLIENT_ID}}
+@tenantClientRedirectUrl = {{TENANT_CLIENT_REDIRECT_URL}}
+@tenantClientScope = {{TENANT_CLIENT_SCOPE}}
+@tenantClientUrl = {{TENANT_CLIENT_URL}}
+@tenantLoginRequestState = {{$guid}}
+
+######### Batch Client
+
+@batchClientId = {{BATCH_CLIENT_ID}}
+@batchClientSecret = {{$dotenv BATCH_CLIENT_SECRET}}
+@batchClientScope = {{BATCH_CLIENT_SCOPE}}
+
+@invalidGuid = 00000000-0000-0000-0000-000000000000
+
+######### OAuth2 Endpoints
+
+@oauth2AuthorizationEndpoint = {{iamUrl}}/oauth2/authorize
+@oauth2LogoutEndpoint = {{iamUrl}}/logout
+@oauth2TokenEndpoint = {{iamUrl}}/oauth2/token
+
+######### Access Tokens
+
+@backofficeAdminAccessToken = {{ExchangeForBackofficePortalBackofficeAdmin.response.body.access_token}}
+@tenantAdmin01AccessToken = {{ExchangeForTenantPortalTenantAdmin01.response.body.access_token}}
+@tenantAdmin02AccessToken = {{ExchangeForTenantPortalTenantAdmin02.response.body.access_token}}
+
+@communityUserAccessToken = {{ExchangeForCommunityPortalCommunityUser.response.body.access_token}}
+
+@batchProcessAccessToken = {{LoginForBatchProcess.response.body.access_token}}
+
+######### Refresh Tokens
+
+@backofficeAdminRefreshToken = {{ExchangeForBackofficePortalBackofficeAdmin.response.body.refresh_token}}
+@tenantAdmin01RefreshToken = {{ExchangeForTenantPortalTenantAdmin01.response.body.refresh_token}}
+@tenantAdmin02RefreshToken = {{ExchangeForTenantPortalTenantAdmin02.response.body.refresh_token}}
+
+@communityUserRefreshToken = {{ExchangeForCommunityPortalCommunityUser.response.body.refresh_token}}
+
+######### Entity IDs
+
+@entityId = {{GetAllEntitiesAsAnonymousSuccess.response.body.data.data[0].entityId}}
+@dependentEntityIdAsBackofficeAdmin = {{GetDependentEntitiesAsBackofficeAdminSuccess.response.body.data[0].dependentEntityId}}
+@dependentEntityIdAsTenantAdmin01 = {{GetDependentEntitiesAsTenantAdmin01Success.response.body.data[0].dependentEntityId}}
+@dependentEntityIdAsTenantAdmin02 = {{GetDependentEntitiesAsTenantAdmin02Success.response.body.data[0].dependentEntityId}}
+@entityImageId = {{GetEntityDetailAsAnonymousSuccess.response.body.data.entityImages[0].entityImageId}}
+
+############ OAUTH 2 AUTHORIZATION
+
+######### Backoffice Portal
+
+# @name LoginForBackofficePortal
+GET {{oauth2AuthorizationEndpoint}}?client_id={{backofficeClientId}}&response_type=code&redirect_uri={{backofficeClientRedirectUrl}}&scope={{backofficeClientScope}}&state={{backofficeLoginRequestState}}&nonce={{$guid}}&code_challenge_method=S256&code_challenge=
+
+###
+
+# @name LogoutForBackofficePortal
+GET {{oauth2LogoutEndpoint}}?client_id={{backofficeClientId}}&logout_uri={{backofficeClientRedirectUrl}}
+
+###
+
+# @name ExchangeForBackofficePortalBackofficeAdmin
+POST {{oauth2TokenEndpoint}}
+Content-Type: application/x-www-form-urlencoded
+Origin: {{backofficeClientUrl}}
+
+grant_type=authorization_code
+&client_id={{backofficeClientId}}
+&redirect_uri={{backofficeClientRedirectUrl}}
+&scope={{backofficeClientScope}}
+&code=
+&code_verifier=
+
+###
+
+# @name RefreshForBackofficePortalBackofficeAdmin
+POST {{oauth2TokenEndpoint}}
+Content-Type: application/x-www-form-urlencoded
+Origin: {{backofficeClientUrl}}
+
+grant_type=refresh_token
+&client_id={{backofficeClientId}}
+&refresh_token={{backofficeAdminRefreshToken}}
+
+######### Tenant Portal
+
+# @name LoginForTenantPortal
+GET {{oauth2AuthorizationEndpoint}}?client_id={{tenantClientId}}&response_type=code&redirect_uri={{tenantClientRedirectUrl}}&scope={{tenantClientScope}}&state={{tenantLoginRequestState}}&nonce={{$guid}}&code_challenge_method=S256&code_challenge=
+
+###
+
+# @name LogoutForTenantPortal
+GET {{oauth2LogoutEndpoint}}?client_id={{tenantClientId}}&logout_uri={{tenantClientRedirectUrl}}
+
+###
+
+# @name ExchangeForTenantPortalTenantAdmin01
+POST {{oauth2TokenEndpoint}}
+Content-Type: application/x-www-form-urlencoded
+Origin: {{tenantClientUrl}}
+
+grant_type=authorization_code
+&client_id={{tenantClientId}}
+&redirect_uri={{tenantClientRedirectUrl}}
+&scope={{tenantClientScope}}
+&code=
+&code_verifier=
+
+###
+
+# @name ExchangeForTenantPortalTenantAdmin02
+POST {{oauth2TokenEndpoint}}
+Content-Type: application/x-www-form-urlencoded
+Origin: {{tenantClientUrl}}
+
+grant_type=authorization_code
+&client_id={{tenantClientId}}
+&redirect_uri={{tenantClientRedirectUrl}}
+&scope={{tenantClientScope}}
+&code=
+&code_verifier=
+
+###
+
+# @name RefreshForTenantPortalTenantAdmin01
+POST {{oauth2TokenEndpoint}}
+Content-Type: application/x-www-form-urlencoded
+Origin: {{tenantClientUrl}}
+
+grant_type=refresh_token
+&client_id={{tenantClientId}}
+&refresh_token={{tenantAdmin01RefreshToken}}
+
+###
+
+# @name RefreshForTenantPortalTenantAdmin02
+POST {{oauth2TokenEndpoint}}
+Content-Type: application/x-www-form-urlencoded
+Origin: {{tenantClientUrl}}
+
+grant_type=refresh_token
+&client_id={{tenantClientId}}
+&refresh_token={{tenantAdmin02RefreshToken}}
+
+######### Community Portal
+
+# @name LoginForCommunityPortal
+GET {{oauth2AuthorizationEndpoint}}?client_id={{communityClientId}}&response_type=code&redirect_uri={{communityClientRedirectUrl}}&scope={{communityClientScope}}&state={{communityLoginRequestState}}&nonce={{$guid}}&code_challenge_method=S256&code_challenge=
+
+###
+
+# @name LogoutForCommunityPortal
+GET {{oauth2LogoutEndpoint}}?client_id={{communityClientId}}&logout_uri={{communityClientRedirectUrl}}
+
+###
+
+# @name ExchangeForCommunityPortalCommunityUser
+POST {{oauth2TokenEndpoint}}
+Content-Type: application/x-www-form-urlencoded
+Origin: {{communityClientUrl}}
+
+grant_type=authorization_code
+&client_id={{communityClientId}}
+&redirect_uri={{communityClientRedirectUrl}}
+&scope={{communityClientScope}}
+&code=
+&code_verifier=
+
+###
+
+# @name RefreshForCommunityPortalCommunityUser
+POST {{oauth2TokenEndpoint}}
+Content-Type: application/x-www-form-urlencoded
+Origin: {{communityClientUrl}}
+
+grant_type=refresh_token
+&client_id={{communityClientId}}
+&refresh_token={{communityUserRefreshToken}}
+
+######### Batch Process
+
+# @name LoginForBatchProcess
+POST {{oauth2TokenEndpoint}}
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=client_credentials
+&client_id={{batchClientId}}
+&client_secret={{batchClientSecret}}
+&scope={{batchClientScope}}
+
+
+############ APIs
+
+######### Entity
+
+###### CreateEntity
+
+# @name CreateEntityAsAnonymousUnauthorized
+POST {{apiUrl}}/CreateEntity
+Content-Type: application/json
+
+{
+  "createRequestId": "{{$guid}}",
+  "entityName": "Test Entity 01"
+}
+
+###
+
+# @name CreateEntityAsBackofficeAdminSuccess
+POST {{apiUrl}}/CreateEntity
+Content-Type: application/json
+Authorization: Bearer {{backofficeAdminAccessToken}}
+
+{
+  "createRequestId": "{{$guid}}",
+  "entityName": "Test Entity 01"
+}
+
+###
+
+# @name CreateEntityAsTenantAdmin01Forbidden
+POST {{apiUrl}}/CreateEntity
+Content-Type: application/json
+Authorization: Bearer {{tenantAdmin01AccessToken}}
+
+{
+  "createRequestId": "{{$guid}}",
+  "entityName": "Test Entity 01"
+}
+
+###
+
+# @name CreateEntityAsTenantAdmin02Forbidden
+POST {{apiUrl}}/CreateEntity
+Content-Type: application/json
+Authorization: Bearer {{tenantAdmin02AccessToken}}
+
+{
+  "createRequestId": "{{$guid}}",
+  "entityName": "Test Entity 01"
+}
+
+###### DeleteEntity
+
+# @name DeleteEntityAsAnonymousUnauthorized
+DELETE {{apiUrl}}/DeleteEntity
+Content-Type: application/json
+
+{
+  "entityId": "{{entityId}}"
+}
+
+###
+
+# @name DeleteEntityAsBackofficeAdminSuccess
+DELETE {{apiUrl}}/DeleteEntity
+Content-Type: application/json
+Authorization: Bearer {{backofficeAdminAccessToken}}
+
+{
+  "entityId": "{{entityId}}"
+}
+
+###
+
+# @name DeleteEntityAsTenantAdmin01Forbidden
+DELETE {{apiUrl}}/DeleteEntity
+Content-Type: application/json
+Authorization: Bearer {{tenantAdmin01AccessToken}}
+
+{
+  "entityId": "{{entityId}}"
+}
+
+###
+
+# @name DeleteEntityAsTenantAdmin02Forbidden
+DELETE {{apiUrl}}/DeleteEntity
+Content-Type: application/json
+Authorization: Bearer {{tenantAdmin02AccessToken}}
+
+{
+  "entityId": "{{entityId}}"
+}
+
+###### GetEntityDetail
+
+# @name GetEntityDetailAsAnonymousSuccess
+GET {{apiUrl}}/GetEntityDetail?EntityId={{entityId}}
+
+###
+
+# @name GetEntityDetailAsBackofficeAdminSuccess
+GET {{apiUrl}}/GetEntityDetail?EntityId={{entityId}}
+Authorization: Bearer {{backofficeAdminAccessToken}}
+
+###
+
+# @name GetEntitytDetailAsTenantAdmin01Success
+GET {{apiUrl}}/GetEntityDetail?EntityId={{entityId}}
+Authorization: Bearer {{tenantAdmin01AccessToken}}
+
+###
+
+# @name GetEntityDetailAsTenantAdmin02Success
+GET {{apiUrl}}/GetEntityDetail?EntityId={{entityId}}
+Authorization: Bearer {{tenantAdmin02AccessToken}}
+
+###### GetEntities
+
+# @name GetAllEntitiesAsAnonymousSuccess
+GET {{apiUrl}}/GetEntities?PageNumber=1&PageSize=100
+
+###
+
+# @name GetAllEntitiesAsBackofficeAdminSuccess
+GET {{apiUrl}}/GetEntities?PageNumber=1&PageSize=100
+Authorization: Bearer {{backofficeAdminAccessToken}}
+
+###
+
+# @name GetAllEntitiesAsTenantAdmin01Success
+GET {{apiUrl}}/GetEntities?PageNumber=1&PageSize=100
+Authorization: Bearer {{tenantAdmin01AccessToken}}
+
+###
+
+# @name GetAllEntitiesAsTenantAdmin02Success
+GET {{apiUrl}}/GetEntities?PageNumber=1&PageSize=100
+Authorization: Bearer {{tenantAdmin02AccessToken}}
+
+###
+
+# @name GetTestEntitiesAsAnonymousSuccess
+GET {{apiUrl}}/GetEntities?EntityName=Test&PageNumber=1&PageSize=100
+
+###
+
+# @name GetTestEntitiesAsBackofficeAdminSuccess
+GET {{apiUrl}}/GetEntities?EntityName=Test&PageNumber=1&PageSize=100
+Authorization: Bearer {{backofficeAdminAccessToken}}
+
+###
+
+# @name GetTestEntitiesAsTenantAdmin01Success
+GET {{apiUrl}}/GetEntities?EntityName=Test&PageNumber=1&PageSize=100
+Authorization: Bearer {{tenantAdmin01AccessToken}}
+
+###
+
+# @name GetTestEntitiesAsTenantAdmin02Success
+GET {{apiUrl}}/GetEntities?EntityName=Test&PageNumber=1&PageSize=100
+Authorization: Bearer {{tenantAdmin02AccessToken}}
+
+###### GetEntityList
+
+# @name GetAllEntityListAsAnonymousUnauthorized
+GET {{apiUrl}}/GetEntityList?PageNumber=1&PageSize=100
+
+###
+
+# @name GetAllEntityListAsBackofficeAdminForbidden
+GET {{apiUrl}}/GetEntityList?PageNumber=1&PageSize=100
+Authorization: Bearer {{backofficeAdminAccessToken}}
+
+###
+
+# @name GetAllEntityListATenantAdmin01Success
+GET {{apiUrl}}/GetEntityList?PageNumber=1&PageSize=100
+Authorization: Bearer {{tenantAdmin01AccessToken}}
+
+###
+
+# @name GetAllEntityListAsTenantAdmin02Success
+GET {{apiUrl}}/GetEntityList?PageNumber=1&PageSize=100
+Authorization: Bearer {{tenantAdmin02AccessToken}}
+
+###
+
+# @name GetTestEntityListAsAnonymousUnauthorized
+GET {{apiUrl}}/GetEntityList?EntityName=Test&PageNumber=1&PageSize=100
+
+###
+
+# @name GetTestEntityListAsBackofficeAdminForbidden
+GET {{apiUrl}}/GetEntityList?EntityName=Test&PageNumber=1&PageSize=100
+Authorization: Bearer {{backofficeAdminAccessToken}}
+
+###
+
+# @name GetTestEntityListATenantAdmin01Success
+GET {{apiUrl}}/GetEntityList?EntityName=Test&PageNumber=1&PageSize=100
+Authorization: Bearer {{tenantAdmin01AccessToken}}
+
+###
+
+# @name GetTestEntityListAsTenantAdmin02Success
+GET {{apiUrl}}/GetEntityList?EntityName=Test&PageNumber=1&PageSize=100
+Authorization: Bearer {{tenantAdmin02AccessToken}}
+
+###### UpdateEntity
+
+# @name UpdateEntityAsAnonymousUnauthorized
+PUT {{apiUrl}}/UpdateEntity
+Content-Type: application/json
+
+{
+  "entityId": "{{entityId}}",
+  "entitytName": "Test Entity 001"
+}
+
+###
+
+# @name UpdateEntityAsBackofficeAdminForbidden
+PUT {{apiUrl}}/UpdateEntity
+Content-Type: application/json
+Authorization: Bearer {{backofficeAdminAccessToken}}
+
+{
+  "entityId": "{{entityId}}",
+  "entityName": "Test Entity 001"
+}
+
+###
+
+# @name UpdateEntityAsTenantAdmin01Success
+PUT {{apiUrl}}/UpdateEntity
+Content-Type: application/json
+Authorization: Bearer {{tenantAdmin01AccessToken}}
+
+{
+  "entityId": "{{entityId}}",
+  "entityName": "Test Entity 001"
+}
+
+###
+
+# @name UpdateEntityAsTenantAdmin02Success
+PUT {{apiUrl}}/UpdateEntity
+Content-Type: application/json
+Authorization: Bearer {{tenantAdmin02AccessToken}}
+
+{
+  "entityId": "{{entityId}}",
+  "entityName": "Test Entity 002"
+}
+
+######### Entity Image
+
+###### DeleteEntityImage
+
+# @name DeleteEntityImageAsAnonymousUnauthorized
+DELETE {{apiUrl}}/DeleteEntityImage
+Content-Type: application/json
+
+{
+  "entityImageId": "{{entityImageId}}"
+}
+
+###
+
+# @name DeleteEntityImageAsBackofficeAdminSuccess
+DELETE {{apiUrl}}/DeleteEntityImage
+Content-Type: application/json
+Authorization: Bearer {{backofficeAdminAccessToken}}
+
+{
+  "entityImageId": "{{entityImageId}}"
+}
+
+###
+
+# @name DeleteEntityImageAsTenantAdmin01Forbidden
+DELETE {{apiUrl}}/DeleteEntityImage
+Content-Type: application/json
+Authorization: Bearer {{tenantAdmin01AccessToken}}
+
+{
+  "entityImageId": "{{entityImageId}}"
+}
+
+###
+
+# @name DeleteEntityImageAsTenantAdmin02Forbidden
+DELETE {{apiUrl}}/DeleteEntityImage
+Content-Type: application/json
+Authorization: Bearer {{tenantAdmin02AccessToken}}
+
+{
+  "entityImageId": "{{entityImageId}}"
+}
+
+###### UploadEntityImage
+
+# @name UploadEntityImageAsAnonymousUnauthorized
+POST {{apiUrl}}/UploadEntityImage
+Content-Type: multipart/form-data; boundary=---------------------------16647115233043073543070130372
+
+-----------------------------16647115233043073543070130372
+Content-Disposition: form-data; name="createRequestId"
+
+{{$guid}}
+-----------------------------16647115233043073543070130372
+Content-Disposition: form-data; name="entityId"
+
+{{entityId}}
+-----------------------------16647115233043073543070130372
+Content-Disposition: form-data; name="imageName"
+
+Test Image 01
+-----------------------------16647115233043073543070130372
+Content-Disposition: form-data; name="fileContent"; filename="Clearwater_River_in_Ahsahka,_Idaho.jpg"
+Content-Type: image/jpeg
+
+< ./Clearwater_River_in_Ahsahka,_Idaho.jpg
+-----------------------------16647115233043073543070130372--
+
+###
+
+# @name UploadEntityImageAsBackofficeAdminSuccess
+POST {{apiUrl}}/UploadEntityImage
+Content-Type: multipart/form-data; boundary=---------------------------16647115233043073543070130372
+Authorization: Bearer {{backofficeAdminAccessToken}}
+
+-----------------------------16647115233043073543070130372
+Content-Disposition: form-data; name="createRequestId"
+
+{{$guid}}
+-----------------------------16647115233043073543070130372
+Content-Disposition: form-data; name="entityId"
+
+{{entityId}}
+-----------------------------16647115233043073543070130372
+Content-Disposition: form-data; name="imageName"
+
+Test Image 01
+-----------------------------16647115233043073543070130372
+Content-Disposition: form-data; name="fileContent"; filename="Clearwater_River_in_Ahsahka,_Idaho.jpg"
+Content-Type: image/jpeg
+
+< ./Clearwater_River_in_Ahsahka,_Idaho.jpg
+-----------------------------16647115233043073543070130372--
+
+###
+
+# @name UploadEntityImageAsTenantAdmin01Forbidden
+POST {{apiUrl}}/UploadEntityImage
+Content-Type: multipart/form-data; boundary=---------------------------16647115233043073543070130372
+Authorization: Bearer {{tenantAdmin01AccessToken}}
+
+-----------------------------16647115233043073543070130372
+Content-Disposition: form-data; name="createRequestId"
+
+{{$guid}}
+-----------------------------16647115233043073543070130372
+Content-Disposition: form-data; name="entityId"
+
+{{entityId}}
+-----------------------------16647115233043073543070130372
+Content-Disposition: form-data; name="imageName"
+
+Test Image 01
+-----------------------------16647115233043073543070130372
+Content-Disposition: form-data; name="fileContent"; filename="Clearwater_River_in_Ahsahka,_Idaho.jpg"
+Content-Type: image/jpeg
+
+< ./Clearwater_River_in_Ahsahka,_Idaho.jpg
+-----------------------------16647115233043073543070130372--
+
+###
+
+# @name UploadEntityImageAsTenantAdmin02Forbidden
+POST {{apiUrl}}/UploadEntityImage
+Content-Type: multipart/form-data; boundary=---------------------------16647115233043073543070130372
+Authorization: Bearer {{tenantAdmin02AccessToken}}
+
+-----------------------------16647115233043073543070130372
+Content-Disposition: form-data; name="createRequestId"
+
+{{$guid}}
+-----------------------------16647115233043073543070130372
+Content-Disposition: form-data; name="entityId"
+
+{{entityId}}
+-----------------------------16647115233043073543070130372
+Content-Disposition: form-data; name="imageName"
+
+Test Image 02
+-----------------------------16647115233043073543070130372
+Content-Disposition: form-data; name="fileContent"; filename="Clearwater_River_in_Ahsahka,_Idaho.jpg"
+Content-Type: image/jpeg
+
+< ./Clearwater_River_in_Ahsahka,_Idaho.jpg
+-----------------------------16647115233043073543070130372--
+
+###
+
+# @name UploadEntityImageAsBackofficeAdminFailMultipartBodyLengthLimitExceeded
+POST {{apiUrl}}/UploadEntityImage
+Content-Type: multipart/form-data; boundary=---------------------------16647115233043073543070130372
+Authorization: Bearer {{backofficeAdminAccessToken}}
+
+-----------------------------16647115233043073543070130372
+Content-Disposition: form-data; name="createRequestId"
+
+{{$guid}}
+-----------------------------16647115233043073543070130372
+Content-Disposition: form-data; name="entityId"
+
+{{entityId}}
+-----------------------------16647115233043073543070130372
+Content-Disposition: form-data; name="imageName"
+
+Test Image 01
+-----------------------------16647115233043073543070130372
+Content-Disposition: form-data; name="fileContent"; filename="Snake_River_(5mb).jpg"
+Content-Type: image/jpeg
+
+< ./Snake_River_(5mb).jpg
+-----------------------------16647115233043073543070130372--
+
+######### Dependent Entity
+
+###### CreateDependentEntities
+
+# @name CreateDependentEntitiesAsAnonymousUnauthorized
+POST {{apiUrl}}/CreateDependentEntities
+Content-Type: application/json
+
+{
+  "createRequestId": "{{$guid}}",
+  "parentId": "{{entityId}}",
+  "dependents": [
+    {
+      "dependentEntityName": "Test Dependent Entity 01"
+    },
+    {
+      "dependentEntityName": "Test Dependent Entity 02"
+    }
+  ]
+}
+
+###
+
+# @name CreateDependentEntitiesAsBackofficeAdminSuccess
+POST {{apiUrl}}/CreateDependentEntities
+Content-Type: application/json
+Authorization: Bearer {{backofficeAdminAccessToken}}
+
+{
+  "createRequestId": "{{$guid}}",
+  "parentId": "{{entityId}}",
+  "dependents": [
+    {
+      "dependentEntityName": "Test Dependent Entity 01"
+    },
+    {
+      "dependentEntityName": "Test Dependent Entity 02"
+    }
+  ]
+}
+
+###
+
+# @name CreateDependentEntitiesAsTenantAdmin01Forbidden
+POST {{apiUrl}}/CreateDependentEntities
+Content-Type: application/json
+Authorization: Bearer {{tenantAdmin01AccessToken}}
+
+{
+  "createRequestId": "{{$guid}}",
+  "parnentId": "{{entityId}}",
+  "dependents": [
+    {
+      "dependentEntityName": "Test Dependent Entity 01"
+    },
+    {
+      "dependenyEntityName": "Test Dependent Entity 02"
+    }
+  ]
+}
+
+###
+
+# @name CreateDependentEntitiesAsTenantAdmin02Forbidden
+POST {{apiUrl}}/CreateDependentEntities
+Content-Type: application/json
+Authorization: Bearer {{tenantAdmin02AccessToken}}
+
+{
+  "createRequestId": "{{$guid}}",
+  "parentId": "{{entityId}}",
+  "dependents": [
+    {
+      "dependentEntityName": "Test Dependent Entity 01"
+    },
+    {
+      "dependentEntityName": "Test Dependent Entity 02"
+    }
+  ]
+}
+
+###### DeleteDependentEntities
+
+# @name DeleteDependentEntitiesAsAnonymousUnauthorized
+POST {{apiUrl}}/DeleteDependentEntities
+Content-Type: application/json
+
+{
+  "parentId": "{{entityId}}",
+  "dependents": [
+    {
+      "dependentId": "{{$guid}}"
+    }
+  ]
+}
+
+###
+
+# @name DeleteDependentEntitiesAsBackofficeAdminSuccess
+POST {{apiUrl}}/DeleteDependentEntities
+Content-Type: application/json
+Authorization: Bearer {{backofficeAdminAccessToken}}
+
+{
+  "parentId": "{{entityId}}",
+  "dependents": [
+    {
+      "dependentId": "{{dependentEntityIdAsBackofficeAdmin}}"
+    }
+  ]
+}
+
+###
+
+# @name DeleteDependentEntitiesAsTenantAdmin01Forbidden
+POST {{apiUrl}}/DeleteDependentEntities
+Content-Type: application/json
+Authorization: Bearer {{tenantAdmin01AccessToken}}
+
+{
+  "parentId": "{{entityId}}",
+  "dependents": [
+    {
+      "dependentId": "{{dependentEntityIdAsTenantAdmin01}}"
+    }
+  ]
+}
+
+###
+
+# @name DeleteDependentEntitiesAsTenantAdmin02Forbidden
+POST {{apiUrl}}/DeleteDependentEntities
+Content-Type: application/json
+Authorization: Bearer {{tenantAdmin02AccessToken}}
+
+{
+  "parentId": "{{entityId}}",
+  "dependents": [
+    {
+      "dependentId": "{{dependentEntityIdAsTenantAdmin02}}"
+    }
+  ]
+}
+
+###### GetDependentEntityDetail
+
+# @name GetDependentEntityDetailAsAnonymousUnauthorized
+GET {{apiUrl}}/GetDependentEntityDetail?dependentEntityId={{$guid}}
+
+###
+
+# @name GetDependentEntityDetailAsBackofficeAdminSuccess
+GET {{apiUrl}}/GetDependentEntityDetail?dependentEntityId={{dependentEntityIdAsBackofficeAdmin}}
+Authorization: Bearer {{backofficeAdminAccessToken}}
+
+###
+
+# @name GetDependentEntityDetailAsTenantAdmin01Success
+GET {{apiUrl}}/GetDependentEntityDetail?dependentEntityId={{dependentEntityIdAsTenantAdmin01}}
+Authorization: Bearer {{tenantAdmin01AccessToken}}
+
+###
+
+# @name GetDependentEntityDetailAsTenantAdmin02Success
+GET {{apiUrl}}/GetDependentEntityDetail?dependentEntityId={{dependentEntityIdAsTenantAdmin02}}
+Authorization: Bearer {{tenantAdmin02AccessToken}}
+
+###### GetDependentEntities
+
+# @name GetDependentEntitiesAsAnonymousUnauthorized
+GET {{apiUrl}}/GetDependentEntities?entityId={{entityId}}
+
+###
+
+# @name GetDependentEntitiesAsBackofficeAdminSuccess
+GET {{apiUrl}}/GetDependentEntities?entityId={{entityId}}
+Authorization: Bearer {{backofficeAdminAccessToken}}
+
+###
+
+# @name GetDependentEntitiesAsTenantAdmin01Success
+GET {{apiUrl}}/GetDependentEntities?entityId={{entityId}}
+Authorization: Bearer {{tenantAdmin01AccessToken}}
+
+###
+
+# @name GetDependentEntitiesAsTenantAdmin02Success
+GET {{apiUrl}}/GetDependentEntities?entityId={{entityId}}
+Authorization: Bearer {{tenantAdmin02AccessToken}}
+
+###### UpdateDependentEntities
+
+# @name UpdateDependentEntitiesAsAnonymousUnauthorized
+PUT {{apiUrl}}/UpdateDependentEntities
+Content-Type: application/json
+
+{
+  "parentId": "{{entityId}}",
+  "dependents": [
+    {
+      "dependentId": "{{$guid}}",
+      "dependentEntityName": "Test Dependent Entity 001"
+    }
+  ]
+}
+
+###
+
+# @name UpdateDependentEntitiesAsBackofficeAdminForbidden
+PUT {{apiUrl}}/UpdateDependentEntities
+Content-Type: application/json
+Authorization: Bearer {{backofficeAdminAccessToken}}
+
+{
+  "parentId": "{{entityId}}",
+  "dependents": [
+    {
+      "dependentId": "{{dependentEntityIdAsBackofficeAdmin}}",
+      "dependentEntityName": "Test Dependent Entity 001"
+    }
+  ]
+}
+
+###
+
+# @name UpdateDependentEntitiesAsTenantAdmin01Success
+PUT {{apiUrl}}/UpdateDependentEntities
+Content-Type: application/json
+Authorization: Bearer {{tenantAdmin01AccessToken}}
+
+{
+  "parentId": "{{entityId}}",
+  "dependents": [
+    {
+      "dependentId": "{{dependentEntityIdAsTenantAdmin01}}",
+      "dependentEntityName": "Test Dependent Entity 001"
+    }
+  ]
+}
+
+###
+
+# @name UpdateDependentEntitiesAsTenantAdmin02Success
+PUT {{apiUrl}}/UpdateDependentEntities
+Content-Type: application/json
+Authorization: Bearer {{tenantAdmin02AccessToken}}
+
+{
+  "parentId": "{{entityId}}",
+  "dependents": [
+    {
+      "dependentId": "{{dependentEntityIdAsTenantAdmin02}}",
+      "dependentEntityName": "Test Dependent Entity 002"
+    }
+  ]
+}
+
+######### Misc
+
+###### GetSupportedBlockchainNetworks
+
+# @name GetSupportedBlockchainNetworksAsAnonymousSuccess
+GET {{apiUrl}}/GetSupportedBlockchainNetworks
+
+###
+
+# @name GetSupportedBlockchainNetworksAsBackofficeAdminSuccess
+GET {{apiUrl}}/GetSupportedBlockchainNetworks
+Authorization: Bearer {{backofficeAdminAccessToken}}
+
+###
+
+# @name GetSupportedBlockchainNetworksAsTenantAdmin01Success
+GET {{apiUrl}}/GetSupportedBlockchainNetworks
+Authorization: Bearer {{tenantAdmin01AccessToken}}
+
+###
+
+# @name GetSupportedBlockchainNetworksAsTenantAdmin02Success
+GET {{apiUrl}}/GetSupportedBlockchainNetworks
+Authorization: Bearer {{tenantAdmin02AccessToken}}
+
+###

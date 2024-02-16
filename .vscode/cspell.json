@@ -1,0 +1,25 @@
+{
+    "version": "0.2",
+    "words": [
+        "appsettings",
+        "aspnetcore",
+        "backoffice",
+        "cmty",
+        "dalmarkit",
+        "devcontainers",
+        "dockerhub",
+        "dtos",
+        "npgsql",
+        "proto",
+        "serilog",
+        "softprops",
+        "tigerwonghk",
+        "userpool",
+        "webapi"
+    ],
+    "ignorePaths": [
+        "/.devcontainer/devcontainer.json",
+        "/.vscode/launch.json",
+        "/.vscode/tasks.json"
+    ]
+}

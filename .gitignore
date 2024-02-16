@@ -1,0 +1,21 @@
+# gitignore: https://git-scm.com/docs/gitignore
+# example: https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
+
+# Build results
+bin/
+obj/
+
+# Dotenv files
+.env
+.env.*
+!.env.example
+
+# Logs
+logs/
+MSBuild_Logs
+
+# Images
+*.jpg
+
+# MacOS
+.DS_Store

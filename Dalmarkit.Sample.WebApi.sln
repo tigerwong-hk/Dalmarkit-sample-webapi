@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".", ".", "{C89E0E72-0D73-460B-84BF-6677B14A42B6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dalmarkit.Sample.Core", "src\Dalmarkit.Sample.Core\Dalmarkit.Sample.Core.csproj", "{FE717FAD-ACA7-460F-B555-58597735A781}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dalmarkit.Sample.EntityFrameworkCore", "src\Dalmarkit.Sample.EntityFrameworkCore\Dalmarkit.Sample.EntityFrameworkCore.csproj", "{C5948FB2-E0C3-4503-98EC-FCCF1387B17E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dalmarkit.Sample.Application", "src\Dalmarkit.Sample.Application\Dalmarkit.Sample.Application.csproj", "{D479B84B-C9FD-452B-AC0F-26A893D2C07F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dalmarkit.Sample.WebApi", "src\Dalmarkit.Sample.WebApi\Dalmarkit.Sample.WebApi.csproj", "{DCE42972-B609-4C11-82D4-7D09D4CCB588}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FE717FAD-ACA7-460F-B555-58597735A781}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE717FAD-ACA7-460F-B555-58597735A781}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE717FAD-ACA7-460F-B555-58597735A781}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE717FAD-ACA7-460F-B555-58597735A781}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5948FB2-E0C3-4503-98EC-FCCF1387B17E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5948FB2-E0C3-4503-98EC-FCCF1387B17E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5948FB2-E0C3-4503-98EC-FCCF1387B17E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5948FB2-E0C3-4503-98EC-FCCF1387B17E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D479B84B-C9FD-452B-AC0F-26A893D2C07F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D479B84B-C9FD-452B-AC0F-26A893D2C07F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D479B84B-C9FD-452B-AC0F-26A893D2C07F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D479B84B-C9FD-452B-AC0F-26A893D2C07F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCE42972-B609-4C11-82D4-7D09D4CCB588}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCE42972-B609-4C11-82D4-7D09D4CCB588}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCE42972-B609-4C11-82D4-7D09D4CCB588}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCE42972-B609-4C11-82D4-7D09D4CCB588}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FE717FAD-ACA7-460F-B555-58597735A781} = {C89E0E72-0D73-460B-84BF-6677B14A42B6}
+		{C5948FB2-E0C3-4503-98EC-FCCF1387B17E} = {C89E0E72-0D73-460B-84BF-6677B14A42B6}
+		{D479B84B-C9FD-452B-AC0F-26A893D2C07F} = {C89E0E72-0D73-460B-84BF-6677B14A42B6}
+		{DCE42972-B609-4C11-82D4-7D09D4CCB588} = {C89E0E72-0D73-460B-84BF-6677B14A42B6}
+	EndGlobalSection
+EndGlobal

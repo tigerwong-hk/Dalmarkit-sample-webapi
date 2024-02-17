@@ -44,7 +44,7 @@ Sample implementation of a ASP.NET Core web API using [Dalmarkit][dalmarkit]
 
 5. Setup PostgreSQL database by running SQL scripts inside [Migration folder][migration] in order
 
-6. Deploy with Docker
+6. Deploy [Docker image][dockerimage]
 
 ```sh
 docker run -d -it -p 5500:5000 -e ASPNETCORE_ENVIRONMENT=Development -e AWS_ACCESS_KEY_ID=<AwsAccessKeyId> -e AWS_SECRET_ACCESS_KEY=+<AwsSecretAccessKey> tigerwonghk/dalmarkit-sample-webapi
@@ -79,6 +79,7 @@ Bug reports and contributions are welcome at our [GitHub repository][repository]
 <!-- LINKS -->
 
 [dalmarkit]: https://github.com/tigerwong-hk/Dalmarkit
+[dockerimage]: https://hub.docker.com/r/tigerwonghk/dalmarkit-sample-webapi
 [envexample]: .env.example
 [migration]: src/Dalmarkit.Sample.WebApi/Migrations
 [prerequisites]: #prerequisites

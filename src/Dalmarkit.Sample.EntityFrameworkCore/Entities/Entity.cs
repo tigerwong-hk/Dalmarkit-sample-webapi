@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Dalmarkit.Sample.EntityFrameworkCore.Entities;
 
-public class Entity : PrincipalEntityBase
+public class Entity : PrincipalReadWriteEntityBase
 {
     [Key]
     [Required]

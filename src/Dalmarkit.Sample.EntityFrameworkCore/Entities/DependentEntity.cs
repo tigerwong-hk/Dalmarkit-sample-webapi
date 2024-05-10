@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace Dalmarkit.Sample.EntityFrameworkCore.Entities;
 
-public class DependentEntity : DependentEntityBase
+public class DependentEntity : DependentReadWriteEntityBase
 {
     [Key]
     [Required]

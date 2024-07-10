@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.300" />
-    <PackageReference Include="Dalmarkit.Cloud" Version="0.3.0-alpha.10" />
+    <PackageReference Include="Dalmarkit.Cloud" Version="0.3.0" />
     <PackageReference Include="Roslynator.Analyzers" Version="4.10.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>

@@ -1,22 +1,23 @@
 using Audit.EntityFramework;
-// using Dalmarkit.Blockchain.Constants;
+using Dalmarkit.Blockchain.Constants;
 using Dalmarkit.Common.AuditTrail;
 using Dalmarkit.EntityFrameworkCore.Extensions;
 using Dalmarkit.Sample.EntityFrameworkCore.Entities;
 using Microsoft.EntityFrameworkCore;
-// using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Dalmarkit.Sample.EntityFrameworkCore.Contexts;
 
 public class DalmarkitSampleDbContext(DbContextOptions options) : AuditDbContext(options)
 {
-    // private static readonly EnumToStringConverter<BlockchainNetwork> BlockchainNetworkConverter = new();
+    private static readonly EnumToStringConverter<BlockchainNetwork> BlockchainNetworkConverter = new();
 
     public DbSet<ApiLog> ApiLogs { get; set; } = null!;
     public DbSet<AuditLog> AuditLogs { get; set; } = null!;
     public DbSet<Entity> Entities { get; set; } = null!;
     public DbSet<EntityImage> EntityImages { get; set; } = null!;
     public DbSet<DependentEntity> DependentEntities { get; set; } = null!;
+    public DbSet<EvmEvent> EvmEvents { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -50,6 +51,15 @@ public class DalmarkitSampleDbContext(DbContextOptions options) : AuditDbContext
             .HasIndex(e => new { e.ObjectName, e.EntityId })
             .HasFilter(@"""IsDeleted"" = false")
             .IsUnique();
+
+        _ = modelBuilder.BuildReadOnlyEntity<EvmEvent>();
+        _ = modelBuilder.Entity<EvmEvent>()
+            .Property(e => e.EvmEventId)
+            .HasDefaultValueSql(ModelBuilderExtensions.DefaultGuidValueSql);
+        _ = modelBuilder.Entity<EvmEvent>()
+            .Property(e => e.BlockchainNetwork)
+            .HasConversion(BlockchainNetworkConverter)
+            .HasMaxLength(20);
 
         base.OnModelCreating(modelBuilder);
     }

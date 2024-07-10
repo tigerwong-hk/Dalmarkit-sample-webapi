@@ -81,6 +81,26 @@ namespace Dalmarkit.Sample.WebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "EvmEvents",
+                columns: table => new
+                {
+                    EvmEventId = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
+                    EventName = table.Column<string>(type: "text", nullable: false),
+                    ContractAddress = table.Column<string>(type: "text", nullable: false),
+                    TransactionHash = table.Column<string>(type: "text", nullable: false),
+                    BlockchainNetwork = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                    EventDetail = table.Column<string>(type: "jsonb", nullable: false),
+                    ClientId = table.Column<string>(type: "text", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now() at time zone 'utc'"),
+                    CreateRequestId = table.Column<string>(type: "text", nullable: false),
+                    CreatorId = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EvmEvents", x => x.EvmEventId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "DependentEntities",
                 columns: table => new
                 {
@@ -302,6 +322,27 @@ namespace Dalmarkit.Sample.WebApi.Migrations
                 columns: new[] { "ObjectName", "EntityId" },
                 unique: true,
                 filter: "\"IsDeleted\" = false");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EvmEvents_ClientId",
+                table: "EvmEvents",
+                column: "ClientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EvmEvents_CreateRequestId_ClientId",
+                table: "EvmEvents",
+                columns: new[] { "CreateRequestId", "ClientId" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EvmEvents_CreatedOn",
+                table: "EvmEvents",
+                column: "CreatedOn");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EvmEvents_CreatorId",
+                table: "EvmEvents",
+                column: "CreatorId");
         }
 
         /// <inheritdoc />
@@ -318,6 +359,9 @@ namespace Dalmarkit.Sample.WebApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "EntityImages");
+
+            migrationBuilder.DropTable(
+                name: "EvmEvents");
 
             migrationBuilder.DropTable(
                 name: "Entities");

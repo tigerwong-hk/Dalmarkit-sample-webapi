@@ -41,4 +41,6 @@ public interface IDalmarkitSampleCommandService
     Task<Result<IEnumerable<Guid>, ErrorDetail>> UpdateDependentEntitiesAsync(UpdateDependentEntitiesInputDto inputDto,
         AuditDetail auditDetail,
         CancellationToken cancellationToken = default);
+
+    Task<Result<Guid, ErrorDetail>> PutEvmEventByNameAsync(PutEvmEventByNameInputDto inputDto, AuditDetail auditDetail, CancellationToken cancellationToken = default);
 }

@@ -54,6 +54,20 @@ CREATE TABLE "Entities" (
     CONSTRAINT "PK_Entities" PRIMARY KEY ("EntityId")
 );
 
+CREATE TABLE "EvmEvents" (
+    "EvmEventId" uuid NOT NULL DEFAULT (gen_random_uuid()),
+    "EventName" text NOT NULL,
+    "ContractAddress" text NOT NULL,
+    "TransactionHash" text NOT NULL,
+    "BlockchainNetwork" character varying(20) NOT NULL,
+    "EventDetail" jsonb NOT NULL,
+    "ClientId" text NOT NULL,
+    "CreatedOn" timestamp with time zone NOT NULL DEFAULT (now() at time zone 'utc'),
+    "CreateRequestId" text NOT NULL,
+    "CreatorId" text NOT NULL,
+    CONSTRAINT "PK_EvmEvents" PRIMARY KEY ("EvmEventId")
+);
+
 CREATE TABLE "DependentEntities" (
     "DependentEntityId" uuid NOT NULL DEFAULT (gen_random_uuid()),
     "DependentEntityName" text NOT NULL,
@@ -150,8 +164,16 @@ CREATE INDEX "IX_EntityImages_ModifierId" ON "EntityImages" ("ModifierId");
 
 CREATE UNIQUE INDEX "IX_EntityImages_ObjectName_EntityId" ON "EntityImages" ("ObjectName", "EntityId") WHERE "IsDeleted" = false;
 
+CREATE INDEX "IX_EvmEvents_ClientId" ON "EvmEvents" ("ClientId");
+
+CREATE UNIQUE INDEX "IX_EvmEvents_CreateRequestId_ClientId" ON "EvmEvents" ("CreateRequestId", "ClientId");
+
+CREATE INDEX "IX_EvmEvents_CreatedOn" ON "EvmEvents" ("CreatedOn");
+
+CREATE INDEX "IX_EvmEvents_CreatorId" ON "EvmEvents" ("CreatorId");
+
 INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-VALUES ('20240215054803_InitialCreate', '8.0.1');
+VALUES ('20240710022259_InitialCreate', '8.0.1');
 
 COMMIT;
 

@@ -6,8 +6,10 @@ using Dalmarkit.Common.Dtos.InputDtos;
 using Dalmarkit.Common.Errors;
 using Dalmarkit.Common.Validation;
 using Dalmarkit.EntityFrameworkCore.Services.ApplicationServices;
+using Dalmarkit.Sample.Application.Mapping;
 using Dalmarkit.Sample.Application.Options;
 using Dalmarkit.Sample.Application.Services.DataServices;
+using Dalmarkit.Sample.Application.Services.ExternalServices;
 using Dalmarkit.Sample.Core.Dtos.Inputs;
 using Dalmarkit.Sample.Core.Dtos.Outputs;
 using Dalmarkit.Sample.EntityFrameworkCore.Entities;
@@ -22,6 +24,8 @@ public class DalmarkitSampleCommandService : ApplicationUploadCommandServiceBase
     private readonly IEntityDataService _entityDataService;
     private readonly IEntityImageDataService _entityImageDataService;
     private readonly IDependentEntityDataService _dependentEntityDataService;
+    private readonly IEvmEventDataService _evmEventDataService;
+    private readonly IEvmBlockchainService _evmBlockchainService;
     private readonly IAwsS3Service _awsS3Service;
 
     public DalmarkitSampleCommandService(IMapper mapper,
@@ -29,6 +33,8 @@ public class DalmarkitSampleCommandService : ApplicationUploadCommandServiceBase
         IEntityDataService entityDataService,
         IEntityImageDataService entityImageDataService,
         IDependentEntityDataService dependentEntityDataService,
+        IEvmEventDataService evmEventDataService,
+        IEvmBlockchainService evmBlockchainService,
         IAwsS3Service awsS3Service) : base(mapper)
     {
         _mapper = Guard.NotNull(mapper, nameof(mapper));
@@ -41,6 +47,8 @@ public class DalmarkitSampleCommandService : ApplicationUploadCommandServiceBase
         _entityDataService = Guard.NotNull(entityDataService, nameof(entityDataService));
         _entityImageDataService = Guard.NotNull(entityImageDataService, nameof(entityImageDataService));
         _dependentEntityDataService = Guard.NotNull(dependentEntityDataService, nameof(dependentEntityDataService));
+        _evmEventDataService = Guard.NotNull(evmEventDataService, nameof(evmEventDataService));
+        _evmBlockchainService = Guard.NotNull(evmBlockchainService, nameof(evmBlockchainService));
         _awsS3Service = Guard.NotNull(awsS3Service, nameof(awsS3Service));
     }
 
@@ -168,4 +176,33 @@ public class DalmarkitSampleCommandService : ApplicationUploadCommandServiceBase
         );
     }
     #endregion Dependent Entities
+
+    #region Blockchain
+    public async Task<Result<Guid, ErrorDetail>> PutEvmEventByNameAsync(PutEvmEventByNameInputDto inputDto, AuditDetail auditDetail, CancellationToken cancellationToken = default)
+    {
+        _ = Guard.NotNullOrWhiteSpace(auditDetail.ModifierId, nameof(auditDetail.ModifierId));
+
+        (string contractAddress, string? jsonAbiFile) = _evmBlockchainService.GetContractInfo(inputDto.ContractName, inputDto.BlockchainNetwork);
+
+        string? evmEvents = await _evmBlockchainService.GetEvmEventByNameAsync(inputDto.EventName, inputDto.ContractName, inputDto.TransactionHash, inputDto.BlockchainNetwork);
+        if (evmEvents == null)
+        {
+            return Error<Guid>(ErrorTypes.ResourceNotFound, inputDto.EventName, inputDto.TransactionHash);
+        }
+
+        EvmEvent entity = _mapper.Map<EvmEvent>(
+            inputDto,
+            opt =>
+            {
+                opt.Items[MappingItemKeys.ContractAddress] = contractAddress;
+                opt.Items[MappingItemKeys.EventDetail] = evmEvents;
+            }
+        );
+
+        _ = await _evmEventDataService.CreateAsync(entity, auditDetail, cancellationToken);
+        _ = await _evmEventDataService.SaveChangesAsync(cancellationToken);
+
+        return Ok(entity.EvmEventId);
+    }
+    #endregion Blockchain
 }

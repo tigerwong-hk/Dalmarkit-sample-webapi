@@ -2,6 +2,7 @@ using AutoMapper;
 using Dalmarkit.Common.Dtos.InputDtos;
 using Dalmarkit.Common.Services;
 using Dalmarkit.EntityFrameworkCore.Mappers;
+using Dalmarkit.Sample.Application.Services.ExternalServices.Contracts;
 using Dalmarkit.Sample.Core.Dtos.Inputs;
 using Dalmarkit.Sample.Core.Dtos.Outputs;
 using Dalmarkit.Sample.EntityFrameworkCore.Entities;
@@ -14,6 +15,8 @@ public class MapperConfigurations : MapperConfigurationBase
     {
         _ = config.CreateMap<GetEntitiesInputDto, GetEntityListInputDto>();
         _ = config.CreateMap<UpdateEntityInputDto, Entity>();
+        _ = config.CreateMap<PositionsOutputDTO, GetNonFungiblePositionManagerPositionsOutputDto>();
+        _ = config.CreateMap<RoyaltyPaymentEventDTO, GetLooksRareExchangeRoyaltyPaymentEventOutputDto>();
     }
 
     protected override void DtoToEntityMappingConfigure(IMapperConfigurationExpression config)
@@ -25,6 +28,14 @@ public class MapperConfigurations : MapperConfigurationBase
         _ = config.CreateMap<UpdateDependentEntitiesInputDto, DependentEntity>();
 
         _ = config.CreateMap<UploadObjectInputDto, EntityImage>();
+
+        _ = config.CreateMap<PutEvmEventByNameInputDto, EvmEvent>()
+            .ForMember(d => d.ContractAddress, opt => opt.MapFrom((_, _, _, context) =>
+                (string)context.Items[MappingItemKeys.ContractAddress]
+            ))
+            .ForMember(d => d.EventDetail, opt => opt.MapFrom((_, _, _, context) =>
+                (string)context.Items[MappingItemKeys.EventDetail]
+            ));
     }
 
     protected override void EntityToDtoMappingConfigure(IMapperConfigurationExpression config)
@@ -42,5 +53,8 @@ public class MapperConfigurations : MapperConfigurationBase
                     src.EntityId,
                     src.EntityImageId,
                     src.ObjectExtension)));
+
+        _ = config.CreateMap<EvmEvent, EvmEventOutputDto>();
+        _ = config.CreateMap<EvmEvent, EvmEventInfoOutputDto>();
     }
 }

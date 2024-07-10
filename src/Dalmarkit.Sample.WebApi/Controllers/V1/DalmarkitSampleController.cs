@@ -224,6 +224,73 @@ namespace Dalmarkit.Sample.WebApi.Controllers.V1
         }
         #endregion Dependent Entity
 
+        #region Blockchain
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<ActionResult> GetEvmEventInfoAsync([FromQuery] GetEvmEventInfoInputDto inputDto)
+        {
+            Result<EvmEventInfoOutputDto, ErrorDetail> result = await _dalmarkitSampleQueryService.GetEvmEventInfoAsync(inputDto);
+
+            return ApiResponse(result);
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<ActionResult> GetEvmEventsAsync([FromQuery] GetEvmEventsInputDto inputDto)
+        {
+            Result<ResponsePagination<EvmEventOutputDto>, ErrorDetail> result = await _dalmarkitSampleQueryService.GetEvmEventsAsync(inputDto);
+
+            return ApiResponse(result);
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<ActionResult> GetNonFungiblePositionManagerPositionsAsync([FromQuery] GetNonFungiblePositionManagerPositionsInputDto inputDto)
+        {
+            Result<GetNonFungiblePositionManagerPositionsOutputDto, ErrorDetail> result = await _dalmarkitSampleQueryService.GetNonFungiblePositionManagerPositionsAsync(inputDto);
+
+            return ApiResponse(result);
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<ActionResult> GetLooksRareExchangeRoyaltyEventAsync([FromQuery] GetLooksRareExchangeRoyaltyPaymentEventInputDto inputDto)
+        {
+            Result<List<GetLooksRareExchangeRoyaltyPaymentEventOutputDto>, ErrorDetail> result = await _dalmarkitSampleQueryService.GetLooksRareExchangeRoyaltyPaymentEventAsync(inputDto);
+
+            return ApiResponse(result);
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<ActionResult> GetLooksRareExchangeRoyaltyEventByNameAsync([FromQuery] GetLooksRareExchangeRoyaltyPaymentEventInputDto inputDto)
+        {
+            Result<string?, ErrorDetail> result = await _dalmarkitSampleQueryService.GetLooksRareExchangeRoyaltyPaymentEventByNameAsync(inputDto);
+
+            return ApiResponse(result);
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<ActionResult> GetLooksRareExchangeRoyaltyEventBySha3SignatureAsync([FromQuery] GetLooksRareExchangeRoyaltyPaymentEventInputDto inputDto)
+        {
+            Result<string?, ErrorDetail> result = await _dalmarkitSampleQueryService.GetLooksRareExchangeRoyaltyPaymentEventBySha3SignatureAsync(inputDto);
+
+            return ApiResponse(result);
+        }
+
+        [Authorize(Policy = nameof(AwsCognitoAuthorizationOptions.BackofficeAdminScopes))]
+        [Authorize(Policy = nameof(AwsCognitoAuthorizationOptions.BackofficeAdminGroups))]
+        [HttpPost]
+        public async Task<ActionResult> PutEvmEventByNameAsync([FromBody] PutEvmEventByNameInputDto inputDto)
+        {
+            AuditDetail auditDetail = CreateAuditDetail();
+            Result<Guid, ErrorDetail> result = await _dalmarkitSampleCommandService.PutEvmEventByNameAsync(inputDto, auditDetail);
+
+            return ApiResponse(result);
+        }
+        #endregion Blockchain
+
         [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult> GetSupportedBlockchainNetworksAsync()

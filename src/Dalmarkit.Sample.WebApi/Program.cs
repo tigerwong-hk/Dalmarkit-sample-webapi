@@ -25,6 +25,7 @@ using System.Globalization;
 using System.Net;
 using System.Security.Claims;
 using System.Text.Json.Serialization;
+using System.Numerics;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -58,6 +59,7 @@ try
     _ = builder.Services.Configure<AwsCognitoAuthenticationOptions>(builder.Configuration.GetSection("AwsCognitoAuthenticationOptions"));
     _ = builder.Services.Configure<AwsCloudFrontOptions>(builder.Configuration.GetSection("AwsCloudFrontOptions"));
     _ = builder.Services.Configure<EvmBlockchainOptions>(builder.Configuration.GetSection("EvmBlockchainOptions"));
+    _ = builder.Services.Configure<ContractOptions>(builder.Configuration.GetSection("ContractOptions"));
     _ = builder.Services.Configure<EntityOptions>(builder.Configuration.GetSection("EntityOptions"));
 
     string? databaseConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -281,6 +283,7 @@ try
                 Array.Empty<string>()
             }
         });
+        options.MapType<BigInteger>(() => new OpenApiSchema { Type = "string" });
     });
 
     WebApplication app = builder.Build();

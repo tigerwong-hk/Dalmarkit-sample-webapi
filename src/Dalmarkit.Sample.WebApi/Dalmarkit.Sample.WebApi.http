@@ -68,6 +68,7 @@
 @dependentEntityIdAsTenantAdmin01 = {{GetDependentEntitiesAsTenantAdmin01Success.response.body.data[0].dependentEntityId}}
 @dependentEntityIdAsTenantAdmin02 = {{GetDependentEntitiesAsTenantAdmin02Success.response.body.data[0].dependentEntityId}}
 @entityImageId = {{GetEntityDetailAsAnonymousSuccess.response.body.data.entityImages[0].entityImageId}}
+@evmEventId = {{GetEvmEventsAsAnonymousSuccess.response.body.data.data[0].evmEventId}}
 
 ############ OAUTH 2 AUTHORIZATION
 
@@ -898,6 +899,67 @@ Authorization: Bearer {{tenantAdmin02AccessToken}}
       "dependentEntityName": "Test Dependent Entity 002"
     }
   ]
+}
+
+######### Blockchain
+
+###### GetEvmEventInfo
+
+# @name GetEvmEventInfoAsAnonymousSuccess
+GET {{apiUrl}}/GetEvmEventInfo?EvmEventId={{evmEventId}}
+
+###### GetEvmEvents
+
+# @name GetEvmEventsAsAnonymousSuccess
+GET {{apiUrl}}/GetEvmEvents?PageNumber=1&PageSize=100
+
+###### GetNonFungiblePositionManagerPositions
+
+# @name GetNonFungiblePositionManagerPositionsAsAnonymousSuccess
+GET {{apiUrl}}/GetNonFungiblePositionManagerPositions?TokenId=1&BlockchainNetwork=Ethereum
+
+###### GetLooksRareExchangeRoyaltyEvent
+
+# @name GetLooksRareExchangeRoyaltyEventAsAnonymousSuccess
+GET {{apiUrl}}/GetLooksRareExchangeRoyaltyEvent?TransactionHash=0x7db1f725b9d2b48f9477a34b2ae6c1c19cc29e72c5cee180ea556e2663ecfaaf&BlockchainNetwork=Ethereum
+
+###### GetLooksRareExchangeRoyaltyEventByName
+
+# @name GetLooksRareExchangeRoyaltyEventByNameAsAnonymousSuccess
+GET {{apiUrl}}/GetLooksRareExchangeRoyaltyEventByName?TransactionHash=0x7db1f725b9d2b48f9477a34b2ae6c1c19cc29e72c5cee180ea556e2663ecfaaf&BlockchainNetwork=Ethereum
+
+###### GetLooksRareExchangeRoyaltyEventBySha3Signature
+
+# @name GetLooksRareExchangeRoyaltyEventBySha3SignatureAsAnonymousSuccess
+GET {{apiUrl}}/GetLooksRareExchangeRoyaltyEventBySha3Signature?TransactionHash=0x7db1f725b9d2b48f9477a34b2ae6c1c19cc29e72c5cee180ea556e2663ecfaaf&BlockchainNetwork=Ethereum
+
+###### PutEvmEventByName
+
+# @name PutEvmEventByNameAsAnonymousUnauthorized
+POST {{apiUrl}}/PutEvmEventByName
+Content-Type: application/json
+
+{
+  "createRequestId": "{{$guid}}",
+  "eventName": "RoyaltyPayment",
+  "contractName": "LooksRareExchange",
+  "transactionHash": "0x7db1f725b9d2b48f9477a34b2ae6c1c19cc29e72c5cee180ea556e2663ecfaaf",
+  "blockchainNetwork": "Ethereum"
+}
+
+###
+
+# @name PutEvmEventByNameAsBackofficeAdminSuccess
+POST {{apiUrl}}/PutEvmEventByName
+Content-Type: application/json
+Authorization: Bearer {{backofficeAdminAccessToken}}
+
+{
+  "createRequestId": "{{$guid}}",
+  "eventName": "RoyaltyPayment",
+  "contractName": "LooksRareExchange",
+  "transactionHash": "0x7db1f725b9d2b48f9477a34b2ae6c1c19cc29e72c5cee180ea556e2663ecfaaf",
+  "blockchainNetwork": "Ethereum"
 }
 
 ######### Misc

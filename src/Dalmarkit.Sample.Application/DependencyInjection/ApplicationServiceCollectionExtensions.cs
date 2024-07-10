@@ -9,6 +9,7 @@ using Dalmarkit.Common.Validation;
 using Dalmarkit.Sample.Application.Mapping;
 using Dalmarkit.Sample.Application.Services.ApplicationServices;
 using Dalmarkit.Sample.Application.Services.DataServices;
+using Dalmarkit.Sample.Application.Services.ExternalServices;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -28,6 +29,7 @@ public static class ApplicationServiceCollectionExtensions
         _ = services.AddScoped<IEntityDataService, EntityDataService>();
         _ = services.AddScoped<IEntityImageDataService, EntityImageDataService>();
         _ = services.AddScoped<IDependentEntityDataService, DependentEntityDataService>();
+        _ = services.AddScoped<IEvmEventDataService, EvmEventDataService>();
 
         _ = services.AddScoped<IDalmarkitSampleQueryService, DalmarkitSampleQueryService>();
         _ = services.AddScoped<IDalmarkitSampleCommandService, DalmarkitSampleCommandService>();
@@ -37,6 +39,8 @@ public static class ApplicationServiceCollectionExtensions
 
     public static IServiceCollection AddBlockchainServices(this IServiceCollection services)
     {
+        _ = services.AddScoped<IEvmBlockchainService, EvmBlockchainService>();
+
         return services;
     }
 

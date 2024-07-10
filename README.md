@@ -47,7 +47,7 @@ Sample implementation of a ASP.NET Core web API using [Dalmarkit][dalmarkit]
 6. Deploy [Docker image][dockerimage]
 
 ```sh
-docker run -d -it -p 5500:5000 -e ASPNETCORE_ENVIRONMENT=Development -e AWS_ACCESS_KEY_ID=<AwsAccessKeyId> -e AWS_SECRET_ACCESS_KEY=+<AwsSecretAccessKey> tigerwonghk/dalmarkit-sample-webapi
+docker run -d -it -p 5500:5000 -e ASPNETCORE_ENVIRONMENT=Development -e AWS_ACCESS_KEY_ID=<AwsAccessKeyId> -e AWS_SECRET_ACCESS_KEY=<AwsSecretAccessKey> tigerwonghk/dalmarkit-sample-webapi
 ```
 
 7. Access Swagger UI web page at http://localhost:5500/swagger to browse the web API documentation

@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Dalmarkit.Sample.WebApi.Migrations
 {
     [DbContext(typeof(DalmarkitSampleDbContext))]
-    [Migration("20240215054803_InitialCreate")]
+    [Migration("20240710022259_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -362,6 +362,65 @@ namespace Dalmarkit.Sample.WebApi.Migrations
                         .HasFilter("\"IsDeleted\" = false");
 
                     b.ToTable("EntityImages");
+                });
+
+            modelBuilder.Entity("Dalmarkit.Sample.EntityFrameworkCore.Entities.EvmEvent", b =>
+                {
+                    b.Property<Guid>("EvmEventId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("gen_random_uuid()");
+
+                    b.Property<string>("BlockchainNetwork")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<string>("ClientId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ContractAddress")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("CreateRequestId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now() at time zone 'utc'");
+
+                    b.Property<string>("CreatorId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("EventDetail")
+                        .IsRequired()
+                        .HasColumnType("jsonb");
+
+                    b.Property<string>("EventName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("TransactionHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("EvmEventId");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("CreatedOn");
+
+                    b.HasIndex("CreatorId");
+
+                    b.HasIndex("CreateRequestId", "ClientId")
+                        .IsUnique();
+
+                    b.ToTable("EvmEvents");
                 });
 
             modelBuilder.Entity("Dalmarkit.Sample.EntityFrameworkCore.Entities.DependentEntity", b =>

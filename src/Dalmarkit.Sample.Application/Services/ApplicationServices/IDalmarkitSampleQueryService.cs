@@ -17,5 +17,17 @@ public interface IDalmarkitSampleQueryService
 
     Task<Result<IEnumerable<DependentEntityOutputDto>, ErrorDetail>> GetDependentEntitiesAsync(GetDependentEntitiesInputDto inputDto, CancellationToken cancellationToken = default);
 
+    Task<Result<GetNonFungiblePositionManagerPositionsOutputDto, ErrorDetail>> GetNonFungiblePositionManagerPositionsAsync(GetNonFungiblePositionManagerPositionsInputDto inputDto, CancellationToken cancellationToken = default);
+
+    Task<Result<EvmEventInfoOutputDto, ErrorDetail>> GetEvmEventInfoAsync(GetEvmEventInfoInputDto inputDto, CancellationToken cancellationToken = default);
+
+    Task<Result<ResponsePagination<EvmEventOutputDto>, ErrorDetail>> GetEvmEventsAsync(GetEvmEventsInputDto inputDto, CancellationToken cancellationToken = default);
+
+    Task<Result<List<GetLooksRareExchangeRoyaltyPaymentEventOutputDto>, ErrorDetail>> GetLooksRareExchangeRoyaltyPaymentEventAsync(GetLooksRareExchangeRoyaltyPaymentEventInputDto inputDto, CancellationToken cancellationToken = default);
+
+    Task<Result<string?, ErrorDetail>> GetLooksRareExchangeRoyaltyPaymentEventByNameAsync(GetLooksRareExchangeRoyaltyPaymentEventInputDto inputDto, CancellationToken cancellationToken = default);
+
+    Task<Result<string?, ErrorDetail>> GetLooksRareExchangeRoyaltyPaymentEventBySha3SignatureAsync(GetLooksRareExchangeRoyaltyPaymentEventInputDto inputDto, CancellationToken cancellationToken = default);
+
     Task<Result<string[], ErrorDetail>> GetSupportedBlockchainNetworksAsync(CancellationToken cancellationToken = default);
 }

@@ -7,6 +7,8 @@ using Dalmarkit.EntityFrameworkCore.Mappers;
 using Dalmarkit.EntityFrameworkCore.Services.ApplicationServices;
 using Dalmarkit.Sample.Application.Options;
 using Dalmarkit.Sample.Application.Services.DataServices;
+using Dalmarkit.Sample.Application.Services.ExternalServices;
+using Dalmarkit.Sample.Application.Services.ExternalServices.Contracts;
 using Dalmarkit.Sample.Core.Dtos.Inputs;
 using Dalmarkit.Sample.Core.Dtos.Outputs;
 using Dalmarkit.Sample.EntityFrameworkCore.Entities;
@@ -20,11 +22,15 @@ public class DalmarkitSampleQueryService : ApplicationQueryServiceBase, IDalmark
     private readonly EntityOptions _entityOptions;
     private readonly IEntityDataService _entityDataService;
     private readonly IDependentEntityDataService _dependentEntityDataService;
+    private readonly IEvmEventDataService _evmEventDataService;
+    private readonly IEvmBlockchainService _evmBlockchainService;
 
     public DalmarkitSampleQueryService(IMapper mapper,
         IOptions<EntityOptions> entityOptions,
         IEntityDataService entityDataService,
-        IDependentEntityDataService dependentEntityDataService) : base(mapper)
+        IDependentEntityDataService dependentEntityDataService,
+        IEvmEventDataService evmEventDataService,
+        IEvmBlockchainService evmBlockchainService) : base(mapper)
     {
         _mapper = Guard.NotNull(mapper, nameof(mapper));
 
@@ -34,6 +40,8 @@ public class DalmarkitSampleQueryService : ApplicationQueryServiceBase, IDalmark
 
         _entityDataService = Guard.NotNull(entityDataService, nameof(entityDataService));
         _dependentEntityDataService = Guard.NotNull(dependentEntityDataService, nameof(dependentEntityDataService));
+        _evmEventDataService = Guard.NotNull(evmEventDataService, nameof(evmEventDataService));
+        _evmBlockchainService = Guard.NotNull(evmBlockchainService, nameof(evmBlockchainService));
     }
 
     #region Entity
@@ -96,6 +104,59 @@ public class DalmarkitSampleQueryService : ApplicationQueryServiceBase, IDalmark
         return Ok(output);
     }
     #endregion Dependent Entity
+
+    #region Blockchain
+    public async Task<Result<EvmEventInfoOutputDto, ErrorDetail>> GetEvmEventInfoAsync(GetEvmEventInfoInputDto inputDto, CancellationToken cancellationToken = default)
+    {
+        EvmEvent? evmEventInfo = await _evmEventDataService.GetEvmEventInfoAsync(inputDto.EvmEventId, cancellationToken);
+        if (evmEventInfo == null)
+        {
+            return Error<EvmEventInfoOutputDto>(ErrorTypes.ResourceNotFound, "EvmEvent", inputDto.EvmEventId);
+        }
+
+        EvmEventInfoOutputDto? output = _mapper.Map<EvmEventInfoOutputDto>(evmEventInfo);
+
+        return Ok(output);
+    }
+
+    public async Task<Result<ResponsePagination<EvmEventOutputDto>, ErrorDetail>> GetEvmEventsAsync(GetEvmEventsInputDto inputDto, CancellationToken cancellationToken = default)
+    {
+        ResponsePagination<EvmEvent> evmEvents = await _evmEventDataService.GetEvmEventsAsync(inputDto, cancellationToken);
+        IEnumerable<EvmEventOutputDto> output = _mapper.Map<IEnumerable<EvmEventOutputDto>>(evmEvents.Data);
+
+        return Ok(new ResponsePagination<EvmEventOutputDto>(output, evmEvents.FilteredCount, evmEvents.PageNumber, evmEvents.PageSize));
+    }
+
+    public async Task<Result<GetNonFungiblePositionManagerPositionsOutputDto, ErrorDetail>> GetNonFungiblePositionManagerPositionsAsync(GetNonFungiblePositionManagerPositionsInputDto inputDto, CancellationToken cancellationToken = default)
+    {
+        PositionsOutputDTO? positionsOutput = await _evmBlockchainService.CallNonFungiblePositionManagerPositionsFunctionAsync(inputDto.TokenId, inputDto.BlockchainNetwork);
+        GetNonFungiblePositionManagerPositionsOutputDto output = _mapper.Map<GetNonFungiblePositionManagerPositionsOutputDto>(positionsOutput);
+
+        return Ok(output);
+    }
+
+    public async Task<Result<List<GetLooksRareExchangeRoyaltyPaymentEventOutputDto>, ErrorDetail>> GetLooksRareExchangeRoyaltyPaymentEventAsync(GetLooksRareExchangeRoyaltyPaymentEventInputDto inputDto, CancellationToken cancellationToken = default)
+    {
+        List<RoyaltyPaymentEventDTO>? royaltyPaymentEvents = await _evmBlockchainService.GetLooksRareExchangeRoyaltyPaymentEventAsync(inputDto.TransactionHash, inputDto.BlockchainNetwork);
+        List<GetLooksRareExchangeRoyaltyPaymentEventOutputDto> output = _mapper.Map<List<GetLooksRareExchangeRoyaltyPaymentEventOutputDto>>(royaltyPaymentEvents);
+
+        return Ok(output);
+    }
+
+    public async Task<Result<string?, ErrorDetail>> GetLooksRareExchangeRoyaltyPaymentEventByNameAsync(GetLooksRareExchangeRoyaltyPaymentEventInputDto inputDto, CancellationToken cancellationToken = default)
+    {
+        string? royaltyPaymentEvents = await _evmBlockchainService.GetLooksRareExchangeRoyaltyPaymentEventByNameAsync(inputDto.TransactionHash, inputDto.BlockchainNetwork);
+
+        return Ok(royaltyPaymentEvents);
+    }
+
+    public async Task<Result<string?, ErrorDetail>> GetLooksRareExchangeRoyaltyPaymentEventBySha3SignatureAsync(GetLooksRareExchangeRoyaltyPaymentEventInputDto inputDto, CancellationToken cancellationToken = default)
+    {
+        string? royaltyPaymentEvents = await _evmBlockchainService.GetLooksRareExchangeRoyaltyPaymentEventBySha3SignatureAsync(inputDto.TransactionHash, inputDto.BlockchainNetwork);
+
+        return Ok(royaltyPaymentEvents);
+    }
+    #endregion Blockchain
 
     #region Enum
     public async Task<Result<string[], ErrorDetail>> GetSupportedBlockchainNetworksAsync(CancellationToken cancellationToken = default)

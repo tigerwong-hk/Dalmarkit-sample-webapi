@@ -1,4 +1,5 @@
 using AutoMapper;
+using Dalmarkit.Blockchain.Evm.Services;
 using Dalmarkit.Cloud.Aws.Services;
 using Dalmarkit.Common.Api.Responses;
 using Dalmarkit.Common.AuditTrail;
@@ -203,6 +204,35 @@ public class DalmarkitSampleCommandService : ApplicationUploadCommandServiceBase
         _ = await _evmEventDataService.SaveChangesAsync(cancellationToken);
 
         return Ok(entity.EvmEventId);
+    }
+
+    public async Task<Result<List<Guid>, ErrorDetail>> PutEvmEventsByNameAsync(PutEvmEventByNameInputDto inputDto, AuditDetail auditDetail, CancellationToken cancellationToken = default)
+    {
+        _ = Guard.NotNullOrWhiteSpace(auditDetail.ModifierId, nameof(auditDetail.ModifierId));
+
+        (string contractAddress, string? jsonAbiFile) = _evmBlockchainService.GetContractInfo(inputDto.ContractName, inputDto.BlockchainNetwork);
+
+        List<EvmEventDto>? evmEventDtos = await _evmBlockchainService.GetEvmEventsByNameAsync(inputDto.EventName, inputDto.ContractName, inputDto.TransactionHash, inputDto.BlockchainNetwork);
+        if (evmEventDtos == null)
+        {
+            return Error<List<Guid>>(ErrorTypes.ResourceNotFound, inputDto.EventName, inputDto.TransactionHash);
+        }
+
+        List<EvmEvent> evmEventEntities = [];
+        foreach (EvmEventDto evmEventDto in evmEventDtos)
+        {
+            EvmEvent entity = _mapper.Map<EvmEvent>(
+                evmEventDto,
+                opt => opt.Items[MappingItemKeys.CreateRequestId] = inputDto.CreateRequestId
+            );
+
+            _ = await _evmEventDataService.CreateAsync(entity, auditDetail, cancellationToken);
+            evmEventEntities.Add(entity);
+        }
+
+        _ = await _evmEventDataService.SaveChangesAsync(cancellationToken);
+
+        return Ok(evmEventEntities.ConvertAll(e => e.EvmEventId));
     }
     #endregion Blockchain
 }

@@ -43,4 +43,6 @@ public interface IDalmarkitSampleCommandService
         CancellationToken cancellationToken = default);
 
     Task<Result<Guid, ErrorDetail>> PutEvmEventByNameAsync(PutEvmEventByNameInputDto inputDto, AuditDetail auditDetail, CancellationToken cancellationToken = default);
+
+    Task<Result<List<Guid>, ErrorDetail>> PutEvmEventsByNameAsync(PutEvmEventByNameInputDto inputDto, AuditDetail auditDetail, CancellationToken cancellationToken = default);
 }

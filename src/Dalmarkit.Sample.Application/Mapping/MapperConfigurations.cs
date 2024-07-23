@@ -1,4 +1,5 @@
 using AutoMapper;
+using Dalmarkit.Blockchain.Evm.Services;
 using Dalmarkit.Common.Dtos.InputDtos;
 using Dalmarkit.Common.Services;
 using Dalmarkit.EntityFrameworkCore.Mappers;
@@ -35,6 +36,12 @@ public class MapperConfigurations : MapperConfigurationBase
             ))
             .ForMember(d => d.EventDetail, opt => opt.MapFrom((_, _, _, context) =>
                 (string)context.Items[MappingItemKeys.EventDetail]
+            ));
+
+        _ = config.CreateMap<EvmEventDto, EvmEvent>()
+            .ForMember(d => d.EventDetail, opt => opt.MapFrom(s => s.EventJson))
+            .ForMember(d => d.CreateRequestId, opt => opt.MapFrom((_, _, _, context) =>
+                (string)context.Items[MappingItemKeys.CreateRequestId]
             ));
     }
 

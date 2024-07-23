@@ -213,7 +213,7 @@ public class DalmarkitSampleCommandService : ApplicationUploadCommandServiceBase
         (string contractAddress, string? jsonAbiFile) = _evmBlockchainService.GetContractInfo(inputDto.ContractName, inputDto.BlockchainNetwork);
 
         List<EvmEventDto>? evmEventDtos = await _evmBlockchainService.GetEvmEventsByNameAsync(inputDto.EventName, inputDto.ContractName, inputDto.TransactionHash, inputDto.BlockchainNetwork);
-        if (evmEventDtos == null)
+        if (evmEventDtos == null || evmEventDtos.Count == 0)
         {
             return Error<List<Guid>>(ErrorTypes.ResourceNotFound, inputDto.EventName, inputDto.TransactionHash);
         }

@@ -928,6 +928,11 @@ GET {{apiUrl}}/GetLooksRareExchangeRoyaltyEvent?TransactionHash=0x7db1f725b9d2b4
 # @name GetLooksRareExchangeRoyaltyEventByNameAsAnonymousSuccess
 GET {{apiUrl}}/GetLooksRareExchangeRoyaltyEventByName?TransactionHash=0x7db1f725b9d2b48f9477a34b2ae6c1c19cc29e72c5cee180ea556e2663ecfaaf&BlockchainNetwork=Ethereum
 
+###### GetLooksRareExchangeRoyaltyEventsByName
+
+# @name GetLooksRareExchangeRoyaltyEventsByNameAsAnonymousSuccess
+GET {{apiUrl}}/GetLooksRareExchangeRoyaltyEventsByName?TransactionHash=0x7db1f725b9d2b48f9477a34b2ae6c1c19cc29e72c5cee180ea556e2663ecfaaf&BlockchainNetwork=Ethereum
+
 ###### GetLooksRareExchangeRoyaltyEventBySha3Signature
 
 # @name GetLooksRareExchangeRoyaltyEventBySha3SignatureAsAnonymousSuccess
@@ -951,6 +956,21 @@ Content-Type: application/json
 
 # @name PutEvmEventByNameAsBackofficeAdminSuccess
 POST {{apiUrl}}/PutEvmEventByName
+Content-Type: application/json
+Authorization: Bearer {{backofficeAdminAccessToken}}
+
+{
+  "createRequestId": "{{$guid}}",
+  "eventName": "RoyaltyPayment",
+  "contractName": "LooksRareExchange",
+  "transactionHash": "0x7db1f725b9d2b48f9477a34b2ae6c1c19cc29e72c5cee180ea556e2663ecfaaf",
+  "blockchainNetwork": "Ethereum"
+}
+
+###
+
+# @name PutEvmEventsByNameAsBackofficeAdminSuccess
+POST {{apiUrl}}/PutEvmEventsByName
 Content-Type: application/json
 Authorization: Bearer {{backofficeAdminAccessToken}}
 

@@ -1,5 +1,6 @@
 using AutoMapper;
 using Dalmarkit.Blockchain.Constants;
+using Dalmarkit.Blockchain.Evm.Services;
 using Dalmarkit.Common.Api.Responses;
 using Dalmarkit.Common.Errors;
 using Dalmarkit.Common.Validation;
@@ -146,6 +147,13 @@ public class DalmarkitSampleQueryService : ApplicationQueryServiceBase, IDalmark
     public async Task<Result<string?, ErrorDetail>> GetLooksRareExchangeRoyaltyPaymentEventByNameAsync(GetLooksRareExchangeRoyaltyPaymentEventInputDto inputDto, CancellationToken cancellationToken = default)
     {
         string? royaltyPaymentEvents = await _evmBlockchainService.GetLooksRareExchangeRoyaltyPaymentEventByNameAsync(inputDto.TransactionHash, inputDto.BlockchainNetwork);
+
+        return Ok(royaltyPaymentEvents);
+    }
+
+    public async Task<Result<List<EvmEventDto>?, ErrorDetail>> GetLooksRareExchangeRoyaltyPaymentEventsByNameAsync(GetLooksRareExchangeRoyaltyPaymentEventInputDto inputDto, CancellationToken cancellationToken = default)
+    {
+        List<EvmEventDto>? royaltyPaymentEvents = await _evmBlockchainService.GetLooksRareExchangeRoyaltyPaymentEventsByNameAsync(inputDto.TransactionHash, inputDto.BlockchainNetwork);
 
         return Ok(royaltyPaymentEvents);
     }

@@ -1,3 +1,4 @@
+using Dalmarkit.Blockchain.Evm.Services;
 using Dalmarkit.Common.Api.Responses;
 using Dalmarkit.Common.Errors;
 using Dalmarkit.Sample.Core.Dtos.Inputs;
@@ -26,6 +27,8 @@ public interface IDalmarkitSampleQueryService
     Task<Result<List<GetLooksRareExchangeRoyaltyPaymentEventOutputDto>, ErrorDetail>> GetLooksRareExchangeRoyaltyPaymentEventAsync(GetLooksRareExchangeRoyaltyPaymentEventInputDto inputDto, CancellationToken cancellationToken = default);
 
     Task<Result<string?, ErrorDetail>> GetLooksRareExchangeRoyaltyPaymentEventByNameAsync(GetLooksRareExchangeRoyaltyPaymentEventInputDto inputDto, CancellationToken cancellationToken = default);
+
+    Task<Result<List<EvmEventDto>?, ErrorDetail>> GetLooksRareExchangeRoyaltyPaymentEventsByNameAsync(GetLooksRareExchangeRoyaltyPaymentEventInputDto inputDto, CancellationToken cancellationToken = default);
 
     Task<Result<string?, ErrorDetail>> GetLooksRareExchangeRoyaltyPaymentEventBySha3SignatureAsync(GetLooksRareExchangeRoyaltyPaymentEventInputDto inputDto, CancellationToken cancellationToken = default);
 

@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.ComponentModel.DataAnnotations;
+using Dalmarkit.Blockchain.Evm.Services;
 
 namespace Dalmarkit.Sample.WebApi.Controllers.V1
 {
@@ -272,6 +273,15 @@ namespace Dalmarkit.Sample.WebApi.Controllers.V1
 
         [AllowAnonymous]
         [HttpGet]
+        public async Task<ActionResult> GetLooksRareExchangeRoyaltyEventsByNameAsync([FromQuery] GetLooksRareExchangeRoyaltyPaymentEventInputDto inputDto)
+        {
+            Result<List<EvmEventDto>?, ErrorDetail> result = await _dalmarkitSampleQueryService.GetLooksRareExchangeRoyaltyPaymentEventsByNameAsync(inputDto);
+
+            return ApiResponse(result);
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
         public async Task<ActionResult> GetLooksRareExchangeRoyaltyEventBySha3SignatureAsync([FromQuery] GetLooksRareExchangeRoyaltyPaymentEventInputDto inputDto)
         {
             Result<string?, ErrorDetail> result = await _dalmarkitSampleQueryService.GetLooksRareExchangeRoyaltyPaymentEventBySha3SignatureAsync(inputDto);
@@ -286,6 +296,17 @@ namespace Dalmarkit.Sample.WebApi.Controllers.V1
         {
             AuditDetail auditDetail = CreateAuditDetail();
             Result<Guid, ErrorDetail> result = await _dalmarkitSampleCommandService.PutEvmEventByNameAsync(inputDto, auditDetail);
+
+            return ApiResponse(result);
+        }
+
+        [Authorize(Policy = nameof(AwsCognitoAuthorizationOptions.BackofficeAdminScopes))]
+        [Authorize(Policy = nameof(AwsCognitoAuthorizationOptions.BackofficeAdminGroups))]
+        [HttpPost]
+        public async Task<ActionResult> PutEvmEventsByNameAsync([FromBody] PutEvmEventByNameInputDto inputDto)
+        {
+            AuditDetail auditDetail = CreateAuditDetail();
+            Result<List<Guid>, ErrorDetail> result = await _dalmarkitSampleCommandService.PutEvmEventsByNameAsync(inputDto, auditDetail);
 
             return ApiResponse(result);
         }

@@ -97,6 +97,31 @@ public class EvmBlockchainService : EvmBlockchainServiceBase, IEvmBlockchainServ
         return await GetEventByNameAsync(contractAddress, transactionHash, blockchainNetwork, eventName, jsonAbi);
     }
 
+    public async Task<List<EvmEventDto>?> GetEvmEventsByNameAsync(string eventName, string contractName, string transactionHash, BlockchainNetwork blockchainNetwork)
+    {
+        _ = Guard.NotNullOrWhiteSpace(eventName, nameof(eventName));
+        _ = Guard.NotNullOrWhiteSpace(contractName, nameof(contractName));
+        _ = Guard.NotNullOrWhiteSpace(transactionHash, nameof(transactionHash));
+
+        (string contractAddress, string? jsonAbiFile) = GetContractInfo(contractName, blockchainNetwork);
+
+        if (string.IsNullOrWhiteSpace(contractAddress))
+        {
+            _logger.ContractAddressNullOrWhitespaceForError(contractName, blockchainNetwork);
+            return default;
+        }
+
+        if (string.IsNullOrWhiteSpace(jsonAbiFile))
+        {
+            _logger.JsonAbiFileNullOrWhitespaceForError(contractName, blockchainNetwork);
+            return default;
+        }
+
+        string jsonAbi = await File.ReadAllTextAsync(jsonAbiFile);
+
+        return await GetEventsByNameAsync(contractAddress, transactionHash, blockchainNetwork, eventName, jsonAbi);
+    }
+
     public async Task<List<RoyaltyPaymentEventDTO>?> GetLooksRareExchangeRoyaltyPaymentEventAsync(string transactionHash, BlockchainNetwork blockchainNetwork)
     {
         _ = Guard.NotNullOrWhiteSpace(transactionHash, nameof(transactionHash));
@@ -132,6 +157,29 @@ public class EvmBlockchainService : EvmBlockchainServiceBase, IEvmBlockchainServ
         string jsonAbi = await File.ReadAllTextAsync(jsonAbiFile);
 
         return await GetEventByNameAsync(contractAddress, transactionHash, blockchainNetwork, "RoyaltyPayment", jsonAbi);
+    }
+
+    public async Task<List<EvmEventDto>?> GetLooksRareExchangeRoyaltyPaymentEventsByNameAsync(string transactionHash, BlockchainNetwork blockchainNetwork)
+    {
+        _ = Guard.NotNullOrWhiteSpace(transactionHash, nameof(transactionHash));
+
+        (string contractAddress, string? jsonAbiFile) = GetContractInfo("LooksRareExchange", blockchainNetwork);
+
+        if (string.IsNullOrWhiteSpace(contractAddress))
+        {
+            _logger.ContractAddressNullOrWhitespaceForError("LooksRareExchange", blockchainNetwork);
+            return default;
+        }
+
+        if (string.IsNullOrWhiteSpace(jsonAbiFile))
+        {
+            _logger.JsonAbiFileNullOrWhitespaceForError("LooksRareExchange", blockchainNetwork);
+            return default;
+        }
+
+        string jsonAbi = await File.ReadAllTextAsync(jsonAbiFile);
+
+        return await GetEventsByNameAsync(contractAddress, transactionHash, blockchainNetwork, "RoyaltyPayment", jsonAbi);
     }
 
     public async Task<string?> GetLooksRareExchangeRoyaltyPaymentEventBySha3SignatureAsync(string transactionHash, BlockchainNetwork blockchainNetwork)

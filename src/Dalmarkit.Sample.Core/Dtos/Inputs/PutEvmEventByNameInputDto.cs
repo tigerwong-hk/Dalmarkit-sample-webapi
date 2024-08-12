@@ -25,4 +25,6 @@ public class PutEvmEventByNameInputDto
     [Required(ErrorMessage = ErrorMessages.ModelStateErrors.FieldRequired)]
     [EnumDataType(typeof(BlockchainNetwork))]
     public BlockchainNetwork BlockchainNetwork { get; set; }
+
+    public string[]? ContractCallerAddresses { get; set; }
 }

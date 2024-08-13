@@ -72,7 +72,7 @@ public class EvmBlockchainService : EvmBlockchainServiceBase, IEvmBlockchainServ
         return (contractAddress, contractInfo.ContractJsonAbiFile);
     }
 
-    public async Task<string?> GetEvmEventByNameAsync(string eventName, string contractName, string[] contractCallerAddresses, string transactionHash, BlockchainNetwork blockchainNetwork)
+    public async Task<string?> GetEvmEventByNameAsync(string eventName, string contractName, string transactionHash, BlockchainNetwork blockchainNetwork)
     {
         _ = Guard.NotNullOrWhiteSpace(eventName, nameof(eventName));
         _ = Guard.NotNullOrWhiteSpace(contractName, nameof(contractName));
@@ -94,10 +94,10 @@ public class EvmBlockchainService : EvmBlockchainServiceBase, IEvmBlockchainServ
 
         string jsonAbi = await File.ReadAllTextAsync(jsonAbiFile);
 
-        return await GetEventByNameAsync(contractAddress, contractCallerAddresses, transactionHash, blockchainNetwork, eventName, jsonAbi);
+        return await GetEventByNameAsync(contractAddress, transactionHash, blockchainNetwork, eventName, jsonAbi);
     }
 
-    public async Task<List<EvmEventDto>?> GetEvmEventsByNameAsync(string eventName, string contractName, string[] contractCallerAddresses, string transactionHash, BlockchainNetwork blockchainNetwork)
+    public async Task<List<EvmEventDto>?> GetEvmEventsByNameAsync(string eventName, string contractName, string transactionHash, BlockchainNetwork blockchainNetwork)
     {
         _ = Guard.NotNullOrWhiteSpace(eventName, nameof(eventName));
         _ = Guard.NotNullOrWhiteSpace(contractName, nameof(contractName));
@@ -119,7 +119,7 @@ public class EvmBlockchainService : EvmBlockchainServiceBase, IEvmBlockchainServ
 
         string jsonAbi = await File.ReadAllTextAsync(jsonAbiFile);
 
-        return await GetEventsByNameAsync(contractAddress, contractCallerAddresses, transactionHash, blockchainNetwork, eventName, jsonAbi);
+        return await GetEventsByNameAsync(contractAddress, transactionHash, blockchainNetwork, eventName, jsonAbi);
     }
 
     public async Task<List<RoyaltyPaymentEventDTO>?> GetLooksRareExchangeRoyaltyPaymentEventAsync(string transactionHash, BlockchainNetwork blockchainNetwork)
@@ -133,7 +133,7 @@ public class EvmBlockchainService : EvmBlockchainServiceBase, IEvmBlockchainServ
             return default;
         }
 
-        return await GetEventAsync<RoyaltyPaymentEventDTO>(contractAddress, [], transactionHash, blockchainNetwork);
+        return await GetEventAsync<RoyaltyPaymentEventDTO>(contractAddress, transactionHash, blockchainNetwork);
     }
 
     public async Task<string?> GetLooksRareExchangeRoyaltyPaymentEventByNameAsync(string transactionHash, BlockchainNetwork blockchainNetwork)
@@ -156,7 +156,7 @@ public class EvmBlockchainService : EvmBlockchainServiceBase, IEvmBlockchainServ
 
         string jsonAbi = await File.ReadAllTextAsync(jsonAbiFile);
 
-        return await GetEventByNameAsync(contractAddress, [], transactionHash, blockchainNetwork, "RoyaltyPayment", jsonAbi);
+        return await GetEventByNameAsync(contractAddress, transactionHash, blockchainNetwork, "RoyaltyPayment", jsonAbi);
     }
 
     public async Task<List<EvmEventDto>?> GetLooksRareExchangeRoyaltyPaymentEventsByNameAsync(string transactionHash, BlockchainNetwork blockchainNetwork)
@@ -179,7 +179,7 @@ public class EvmBlockchainService : EvmBlockchainServiceBase, IEvmBlockchainServ
 
         string jsonAbi = await File.ReadAllTextAsync(jsonAbiFile);
 
-        return await GetEventsByNameAsync(contractAddress, [], transactionHash, blockchainNetwork, "RoyaltyPayment", jsonAbi);
+        return await GetEventsByNameAsync(contractAddress, transactionHash, blockchainNetwork, "RoyaltyPayment", jsonAbi);
     }
 
     public async Task<string?> GetLooksRareExchangeRoyaltyPaymentEventBySha3SignatureAsync(string transactionHash, BlockchainNetwork blockchainNetwork)
@@ -202,7 +202,7 @@ public class EvmBlockchainService : EvmBlockchainServiceBase, IEvmBlockchainServ
 
         string jsonAbi = await File.ReadAllTextAsync(jsonAbiFile);
 
-        return await GetEventBySha3SignatureAsync(contractAddress, [], transactionHash, blockchainNetwork, "0x27c4f0403323142b599832f26acd21c74a9e5b809f2215726e244a4ac588cd7d", jsonAbi);
+        return await GetEventBySha3SignatureAsync(contractAddress, transactionHash, blockchainNetwork, "0x27c4f0403323142b599832f26acd21c74a9e5b809f2215726e244a4ac588cd7d", jsonAbi);
     }
 }
 

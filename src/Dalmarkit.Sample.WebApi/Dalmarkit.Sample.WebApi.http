@@ -321,7 +321,7 @@ Authorization: Bearer {{backofficeAdminAccessToken}}
 
 ###
 
-# @name GetEntitytDetailAsTenantAdmin01Success
+# @name GetEntityDetailAsTenantAdmin01Success
 GET {{apiUrl}}/GetEntityDetail?EntityId={{entityId}}
 Authorization: Bearer {{tenantAdmin01AccessToken}}
 
@@ -431,7 +431,7 @@ Content-Type: application/json
 
 {
   "entityId": "{{entityId}}",
-  "entitytName": "Test Entity 001"
+  "entityName": "Test Entity 001"
 }
 
 ###
@@ -694,13 +694,13 @@ Authorization: Bearer {{tenantAdmin01AccessToken}}
 
 {
   "createRequestId": "{{$guid}}",
-  "parnentId": "{{entityId}}",
+  "parentId": "{{entityId}}",
   "dependents": [
     {
       "dependentEntityName": "Test Dependent Entity 01"
     },
     {
-      "dependenyEntityName": "Test Dependent Entity 02"
+      "dependentEntityName": "Test Dependent Entity 02"
     }
   ]
 }

@@ -28,7 +28,7 @@ using System.Text.Json.Serialization;
 using System.Numerics;
 
 Log.Logger = new LoggerConfiguration()
-    .WriteTo.Console()
+    .WriteTo.Console(formatProvider: CultureInfo.InvariantCulture)
     .CreateBootstrapLogger();
 
 Log.Information("Starting up!");
@@ -47,7 +47,7 @@ try
         .ReadFrom.Configuration(context.Configuration)
         .ReadFrom.Services(services)
         .Enrich.FromLogContext()
-        .WriteTo.Console());
+        .WriteTo.Console(formatProvider: CultureInfo.InvariantCulture));
 
     _ = builder.WebHost.UseKestrel(options =>
     {

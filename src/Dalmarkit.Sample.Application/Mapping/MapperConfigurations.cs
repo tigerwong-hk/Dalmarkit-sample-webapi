@@ -15,7 +15,6 @@ public class MapperConfigurations : MapperConfigurationBase
     protected override void DtoToDtoMappingConfigure(IMapperConfigurationExpression config)
     {
         _ = config.CreateMap<GetEntitiesInputDto, GetEntityListInputDto>();
-        _ = config.CreateMap<UpdateEntityInputDto, Entity>();
         _ = config.CreateMap<PositionsOutputDTO, GetNonFungiblePositionManagerPositionsOutputDto>();
         _ = config.CreateMap<RoyaltyPaymentEventDTO, GetLooksRareExchangeRoyaltyPaymentEventOutputDto>();
     }

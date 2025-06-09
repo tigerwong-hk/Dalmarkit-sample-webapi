@@ -23,7 +23,7 @@ public class DalmarkitSampleDbContext(DbContextOptions options) : AuditDbContext
     {
         _ = modelBuilder.BuildApiLogEntity();
 
-        _ = modelBuilder.BuildApiLogEntity();
+        _ = modelBuilder.BuildAuditLogEntity();
 
         _ = modelBuilder.BuildReadWriteEntity<Entity>();
         _ = modelBuilder.Entity<Entity>()

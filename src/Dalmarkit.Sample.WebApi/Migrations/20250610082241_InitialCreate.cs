@@ -48,10 +48,10 @@ namespace Dalmarkit.Sample.WebApi.Migrations
                     Error = table.Column<string>(type: "text", nullable: true),
                     PrimaryKey = table.Column<string>(type: "text", nullable: false),
                     Table = table.Column<string>(type: "text", nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now() at time zone 'utc'"),
                     DurationMsec = table.Column<int>(type: "integer", nullable: false),
                     LogDetail = table.Column<string>(type: "jsonb", nullable: false),
-                    ModifiedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now() at time zone 'utc'"),
                     Status = table.Column<bool>(type: "boolean", nullable: false),
                     TraceId = table.Column<string>(type: "text", nullable: false),
                     UserId = table.Column<string>(type: "text", nullable: true)
@@ -198,6 +198,42 @@ namespace Dalmarkit.Sample.WebApi.Migrations
                 name: "IX_ApiLogs_UserIp",
                 table: "ApiLogs",
                 column: "UserIp");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AuditLogs_ChangedValues",
+                table: "AuditLogs",
+                column: "ChangedValues")
+                .Annotation("Npgsql:IndexMethod", "gin");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AuditLogs_CreatedOn",
+                table: "AuditLogs",
+                column: "CreatedOn");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AuditLogs_ModifiedOn",
+                table: "AuditLogs",
+                column: "ModifiedOn");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AuditLogs_PrimaryKey",
+                table: "AuditLogs",
+                column: "PrimaryKey");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AuditLogs_Table_PrimaryKey",
+                table: "AuditLogs",
+                columns: new[] { "Table", "PrimaryKey" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AuditLogs_TraceId",
+                table: "AuditLogs",
+                column: "TraceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AuditLogs_UserId",
+                table: "AuditLogs",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DependentEntities_ClientId",

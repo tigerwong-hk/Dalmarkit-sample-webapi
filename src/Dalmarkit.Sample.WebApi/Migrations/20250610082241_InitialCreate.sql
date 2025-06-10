@@ -31,10 +31,10 @@ CREATE TABLE "AuditLogs" (
     "Error" text,
     "PrimaryKey" text NOT NULL,
     "Table" text NOT NULL,
-    "CreatedOn" timestamp with time zone NOT NULL,
+    "CreatedOn" timestamp with time zone NOT NULL DEFAULT (now() at time zone 'utc'),
     "DurationMsec" integer NOT NULL,
     "LogDetail" jsonb NOT NULL,
-    "ModifiedOn" timestamp with time zone NOT NULL,
+    "ModifiedOn" timestamp with time zone NOT NULL DEFAULT (now() at time zone 'utc'),
     "Status" boolean NOT NULL,
     "TraceId" text NOT NULL,
     "UserId" text,
@@ -118,6 +118,20 @@ CREATE INDEX "IX_ApiLogs_UserId" ON "ApiLogs" ("UserId");
 
 CREATE INDEX "IX_ApiLogs_UserIp" ON "ApiLogs" ("UserIp");
 
+CREATE INDEX "IX_AuditLogs_ChangedValues" ON "AuditLogs" USING gin ("ChangedValues");
+
+CREATE INDEX "IX_AuditLogs_CreatedOn" ON "AuditLogs" ("CreatedOn");
+
+CREATE INDEX "IX_AuditLogs_ModifiedOn" ON "AuditLogs" ("ModifiedOn");
+
+CREATE INDEX "IX_AuditLogs_PrimaryKey" ON "AuditLogs" ("PrimaryKey");
+
+CREATE INDEX "IX_AuditLogs_Table_PrimaryKey" ON "AuditLogs" ("Table", "PrimaryKey");
+
+CREATE INDEX "IX_AuditLogs_TraceId" ON "AuditLogs" ("TraceId");
+
+CREATE INDEX "IX_AuditLogs_UserId" ON "AuditLogs" ("UserId");
+
 CREATE INDEX "IX_DependentEntities_ClientId" ON "DependentEntities" ("ClientId");
 
 CREATE UNIQUE INDEX "IX_DependentEntities_CreateRequestId_ClientId_EntityHash" ON "DependentEntities" ("CreateRequestId", "ClientId", "EntityHash");
@@ -173,7 +187,7 @@ CREATE INDEX "IX_EvmEvents_CreatedOn" ON "EvmEvents" ("CreatedOn");
 CREATE INDEX "IX_EvmEvents_CreatorId" ON "EvmEvents" ("CreatorId");
 
 INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-VALUES ('20240710022259_InitialCreate', '8.0.1');
+VALUES ('20250610082241_InitialCreate', '8.0.11');
 
 COMMIT;
 

@@ -39,7 +39,7 @@ public static class ApplicationServiceCollectionExtensions
 
     public static IServiceCollection AddBlockchainServices(this IServiceCollection services)
     {
-        _ = services.AddScoped<IEvmBlockchainService, EvmBlockchainService>();
+        _ = services.AddSingleton<IEvmBlockchainService, EvmBlockchainService>();
 
         return services;
     }
@@ -49,14 +49,14 @@ public static class ApplicationServiceCollectionExtensions
         ServiceProvider serviceProvider = services.BuildServiceProvider();
         AWSOptions awsOptions = config.GetAWSOptions();
 
-        _ = services.AddScoped(_ => new AmazonCloudFrontClient(awsOptions.Region));
+        _ = services.AddSingleton(_ => new AmazonCloudFrontClient(awsOptions.Region));
 
-        _ = services.AddScoped<IAmazonCognitoIdentityProvider>(_ => new AmazonCognitoIdentityProviderClient(awsOptions.Region));
+        _ = services.AddSingleton<IAmazonCognitoIdentityProvider>(_ => new AmazonCognitoIdentityProviderClient(awsOptions.Region));
 
-        _ = services.AddScoped(_ => new AmazonRoute53Client(awsOptions.Region));
+        _ = services.AddSingleton(_ => new AmazonRoute53Client(awsOptions.Region));
 
-        _ = services.AddScoped(_ => new AmazonS3Client(awsOptions.Region));
-        _ = services.AddScoped(provider =>
+        _ = services.AddSingleton(_ => new AmazonS3Client(awsOptions.Region));
+        _ = services.AddSingleton(provider =>
         {
             AmazonS3Client amazonS3Client = provider.GetRequiredService<AmazonS3Client>();
             return new TransferUtility(amazonS3Client);

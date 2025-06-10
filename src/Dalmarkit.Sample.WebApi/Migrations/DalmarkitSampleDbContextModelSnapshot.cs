@@ -17,7 +17,7 @@ namespace Dalmarkit.Sample.WebApi.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.1")
+                .HasAnnotation("ProductVersion", "8.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -116,7 +116,9 @@ namespace Dalmarkit.Sample.WebApi.Migrations
                         .HasColumnType("jsonb");
 
                     b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("timestamp with time zone");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now() at time zone 'utc'");
 
                     b.Property<int>("DurationMsec")
                         .HasColumnType("integer");
@@ -129,7 +131,9 @@ namespace Dalmarkit.Sample.WebApi.Migrations
                         .HasColumnType("jsonb");
 
                     b.Property<DateTime>("ModifiedOn")
-                        .HasColumnType("timestamp with time zone");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now() at time zone 'utc'");
 
                     b.Property<string>("PrimaryKey")
                         .IsRequired()
@@ -150,6 +154,22 @@ namespace Dalmarkit.Sample.WebApi.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ChangedValues");
+
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("ChangedValues"), "gin");
+
+                    b.HasIndex("CreatedOn");
+
+                    b.HasIndex("ModifiedOn");
+
+                    b.HasIndex("PrimaryKey");
+
+                    b.HasIndex("TraceId");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("Table", "PrimaryKey");
 
                     b.ToTable("AuditLogs");
                 });

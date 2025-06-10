@@ -14,8 +14,11 @@ public class EvmBlockchainService : EvmBlockchainServiceBase, IEvmBlockchainServ
     private readonly ContractOptions _contractOptions;
     private readonly ILogger _logger;
 
-    public EvmBlockchainService(IOptions<ContractOptions> contractOptions, IOptions<EvmBlockchainOptions> blockchainOptions,
-        ILogger<EvmBlockchainServiceBase> logger) : base(blockchainOptions, logger)
+    public EvmBlockchainService(
+        IOptions<ContractOptions> contractOptions,
+        IOptions<EvmBlockchainOptions> blockchainOptions,
+        IOptions<EvmWalletOptions>? walletOptions,
+        ILogger<EvmBlockchainServiceBase> logger) : base(blockchainOptions, walletOptions, logger)
     {
         _contractOptions = Guard.NotNull(contractOptions, nameof(contractOptions)).Value;
         _ = Guard.NotNull(_contractOptions.ContractInfo, nameof(_contractOptions.ContractInfo));
@@ -37,7 +40,7 @@ public class EvmBlockchainService : EvmBlockchainServiceBase, IEvmBlockchainServ
             TokenId = tokenId,
         };
 
-        return await CallContractFunctionAsync<PositionsFunction, PositionsOutputDTO>(positionsFunction, contractAddress, blockchainNetwork);
+        return await CallReadContractFunctionAsync<PositionsFunction, PositionsOutputDTO>(positionsFunction, contractAddress, blockchainNetwork);
     }
 
     public (string, string?) GetContractInfo(string contractName, BlockchainNetwork blockchainNetwork)

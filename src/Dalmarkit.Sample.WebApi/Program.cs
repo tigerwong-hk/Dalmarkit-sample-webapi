@@ -59,6 +59,7 @@ try
     _ = builder.Services.Configure<AwsCognitoAuthenticationOptions>(builder.Configuration.GetSection("AwsCognitoAuthenticationOptions"));
     _ = builder.Services.Configure<AwsCloudFrontOptions>(builder.Configuration.GetSection("AwsCloudFrontOptions"));
     _ = builder.Services.Configure<EvmBlockchainOptions>(builder.Configuration.GetSection("EvmBlockchainOptions"));
+    _ = builder.Services.Configure<EvmWalletOptions>(builder.Configuration.GetSection("EvnWalletOptions"));
     _ = builder.Services.Configure<ContractOptions>(builder.Configuration.GetSection("ContractOptions"));
     _ = builder.Services.Configure<EntityOptions>(builder.Configuration.GetSection("EntityOptions"));
 

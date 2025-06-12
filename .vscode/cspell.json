@@ -24,7 +24,8 @@
         "swashbuckle",
         "tigerwonghk",
         "userpool",
-        "webapi"
+        "webapi",
+        "xunit"
     ],
     "ignorePaths": [
         "/.devcontainer/devcontainer.json",

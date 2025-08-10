@@ -1,8 +1,6 @@
-using Audit.WebApi;
 using Dalmarkit.AspNetCore.Controllers;
 using Dalmarkit.Common.Api.Responses;
 using Dalmarkit.Common.AuditTrail;
-using Dalmarkit.Common.Dtos.InputDtos;
 using Dalmarkit.Common.Errors;
 using Dalmarkit.Common.Identity;
 using Dalmarkit.Common.Validation;
@@ -13,13 +11,12 @@ using Dalmarkit.Sample.Core.Dtos.Outputs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using System.ComponentModel.DataAnnotations;
 using Dalmarkit.Blockchain.Evm.Services;
 
 namespace Dalmarkit.Sample.WebApi.Controllers.V1
 {
     [Authorize]
-    public class DalmarkitSampleController : RestApiUploadControllerBase
+    public class DalmarkitSampleController : RestApiControllerBase
     {
         public const long UploadImageMultipartBodyLengthLimitBytes = 1024 * 1024 * 5;
         // public const int UploadImageHeadersCountLimit = 16;
@@ -31,17 +28,14 @@ namespace Dalmarkit.Sample.WebApi.Controllers.V1
 
         private readonly IDalmarkitSampleQueryService _dalmarkitSampleQueryService;
         private readonly IDalmarkitSampleCommandService _dalmarkitSampleCommandService;
-        private readonly IImageValidatorService _imageValidatorService;
         private readonly EntityOptions _entityOptions;
 
         public DalmarkitSampleController(IDalmarkitSampleQueryService dalmarkitSampleQueryService,
             IDalmarkitSampleCommandService dalmarkitSampleCommandService,
-            IImageValidatorService imageValidatorService,
             IOptions<EntityOptions> entityOptions)
         {
             _dalmarkitSampleQueryService = Guard.NotNull(dalmarkitSampleQueryService, nameof(dalmarkitSampleQueryService));
             _dalmarkitSampleCommandService = Guard.NotNull(dalmarkitSampleCommandService, nameof(dalmarkitSampleCommandService));
-            _imageValidatorService = Guard.NotNull(imageValidatorService, nameof(imageValidatorService));
 
             _entityOptions = Guard.NotNull(entityOptions, nameof(entityOptions)).Value;
             _ = Guard.NotNullOrWhiteSpace(_entityOptions.ImageS3BucketName, nameof(_entityOptions.ImageS3BucketName));
@@ -122,58 +116,6 @@ namespace Dalmarkit.Sample.WebApi.Controllers.V1
         }
         #endregion Entity
 
-        #region Entity Image
-        [Authorize(Policy = nameof(AwsCognitoAuthorizationOptions.BackofficeAdminScopes))]
-        [Authorize(Policy = nameof(AwsCognitoAuthorizationOptions.BackofficeAdminGroups))]
-        [HttpDelete]
-        public async Task<ActionResult> DeleteEntityImageAsync([FromBody] DeleteEntityImageInputDto inputDto)
-        {
-            AuditDetail auditDetail = CreateAuditDetail();
-            Result<Guid, ErrorDetail> result = await _dalmarkitSampleCommandService.DeleteEntityImageAsync(inputDto, auditDetail);
-
-            return ApiResponse(result);
-        }
-
-        [Authorize(Policy = nameof(AwsCognitoAuthorizationOptions.BackofficeAdminScopes))]
-        [Authorize(Policy = nameof(AwsCognitoAuthorizationOptions.BackofficeAdminGroups))]
-        [HttpPost]
-        [RequestFormLimits(MultipartBodyLengthLimit = UploadImageMultipartBodyLengthLimitBytes)]
-        public async Task<ActionResult> UploadEntityImageAsync([FromForm][Required] string createRequestId,
-            [FromForm][Required][NotDefault] Guid entityId,
-            [FromForm][Required][StringLength(64, ErrorMessage = ErrorMessages.ModelStateErrors.LengthExceeded)] string imageName,
-            [AuditIgnore][Required] IFormFile fileContent)
-        {
-            AuditDetail auditDetail = CreateAuditDetail();
-
-            (UploadObjectInputDto? uploadObjectInputDto, string? fileExtensionWithoutPeriod, ActionResult? errorResponse) = GetUploadObjectInputDto(
-                createRequestId,
-                entityId,
-                imageName,
-                UploadImageMultipartBodyLengthLimitBytes,
-                [.. _entityOptions.SupportedImageContentTypes!],
-                [.. _entityOptions.SupportedImageFileExtensions!],
-                fileContent);
-            if (errorResponse != null)
-            {
-                return errorResponse;
-            }
-
-            await using Stream imageStream = fileContent.OpenReadStream();
-            if (!_imageValidatorService.IsValid(imageStream, fileContent.ContentType, fileExtensionWithoutPeriod!))
-            {
-                return ApiResponse(Result.Error<bool, ErrorDetail>(ErrorTypes.BadRequestDetails
-                    .WithArgs(ErrorMessages.ObjectInvalid)));
-            }
-
-            Result<EntityImageOutputDto, ErrorDetail> result = await _dalmarkitSampleCommandService.UploadEntityImageAsync(
-                uploadObjectInputDto!,
-                imageStream,
-                auditDetail);
-
-            return ApiResponse(result);
-        }
-        #endregion Entity Image
-
         #region Dependent Entity
         [Authorize(Policy = nameof(AwsCognitoAuthorizationOptions.BackofficeAdminScopes))]
         [Authorize(Policy = nameof(AwsCognitoAuthorizationOptions.BackofficeAdminGroups))]
@@ -248,7 +190,7 @@ namespace Dalmarkit.Sample.WebApi.Controllers.V1
         [HttpGet]
         public async Task<ActionResult> GetNonFungiblePositionManagerPositionsAsync([FromQuery] GetNonFungiblePositionManagerPositionsInputDto inputDto)
         {
-            Result<GetNonFungiblePositionManagerPositionsOutputDto, ErrorDetail> result = await _dalmarkitSampleQueryService.GetNonFungiblePositionManagerPositionsAsync(inputDto);
+            Result<GetNonFungiblePositionManagerPositionsOutputDto?, ErrorDetail> result = await _dalmarkitSampleQueryService.GetNonFungiblePositionManagerPositionsAsync(inputDto);
 
             return ApiResponse(result);
         }

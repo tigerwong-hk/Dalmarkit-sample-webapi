@@ -1,4 +1,3 @@
-using AutoMapper.Configuration.Annotations;
 using Dalmarkit.Blockchain.Constants;
 using Dalmarkit.Common.Entities.BaseEntities;
 using System.ComponentModel.DataAnnotations;
@@ -10,7 +9,6 @@ public class EvmEvent : ReadOnlyEntityBase
 {
     [Key]
     [Required]
-    [Ignore]
     public Guid EvmEventId { get; set; }
 
     [Required]

@@ -6,7 +6,6 @@ using Amazon.S3;
 using Amazon.S3.Transfer;
 using Dalmarkit.Cloud.Aws.Services;
 using Dalmarkit.Common.Validation;
-using Dalmarkit.Sample.Application.Mapping;
 using Dalmarkit.Sample.Application.Services.ApplicationServices;
 using Dalmarkit.Sample.Application.Services.DataServices;
 using Dalmarkit.Sample.Application.Services.ExternalServices;
@@ -19,8 +18,6 @@ public static class ApplicationServiceCollectionExtensions
 {
     public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration config)
     {
-        _ = services.AddSingleton(_ => new MapperConfigurations().CreateMapper());
-
         _ = services.AddBlockchainServices();
         _ = services.AddCloudServices(config);
         _ = services.AddUtilityServices();
@@ -33,6 +30,7 @@ public static class ApplicationServiceCollectionExtensions
 
         _ = services.AddScoped<IDalmarkitSampleQueryService, DalmarkitSampleQueryService>();
         _ = services.AddScoped<IDalmarkitSampleCommandService, DalmarkitSampleCommandService>();
+        _ = services.AddScoped<IDalmarkitSampleUploadCommandService, DalmarkitSampleUploadCommandService>();
 
         return services;
     }

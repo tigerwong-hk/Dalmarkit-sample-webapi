@@ -1,4 +1,3 @@
-using AutoMapper.Configuration.Annotations;
 using Dalmarkit.Common.Entities.BaseEntities;
 using System.ComponentModel.DataAnnotations;
 
@@ -8,7 +7,6 @@ public class Entity : PrincipalReadWriteEntityBase
 {
     [Key]
     [Required]
-    [Ignore]
     public Guid EntityId { get; set; }
 
     [Required]

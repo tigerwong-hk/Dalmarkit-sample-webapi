@@ -21,19 +21,19 @@
     "rest-client.environmentVariables": {
         "Development": {
             "API_URL": "http://localhost:5000/api/v1/DalmarkitSample",
-            "BACKOFFICE_CLIENT_ID": "",
+            "BACKOFFICE_APP_CLIENT_ID": "",
             "BACKOFFICE_CLIENT_REDIRECT_URL": "http://localhost:3000/login",
             "BACKOFFICE_CLIENT_SCOPE": "openid profile email dalmarkit/bo.adm",
             "BACKOFFICE_CLIENT_URL": "http://localhost:3000",
-            "TENANT_CLIENT_ID": "",
+            "TENANT_APP_CLIENT_ID": "",
             "TENANT_CLIENT_REDIRECT_URL": "http://localhost:3000/login",
             "TENANT_CLIENT_SCOPE": "openid profile email dalmarkit/tn.adm",
             "TENANT_CLIENT_URL": "http://localhost:3000",
-            "COMMUNITY_CLIENT_ID": "",
+            "COMMUNITY_APP_CLIENT_ID": "",
             "COMMUNITY_CLIENT_REDIRECT_URL": "http://localhost:3000/login",
             "COMMUNITY_CLIENT_SCOPE": "openid profile email dalmarkit/cmty.usr",
             "COMMUNITY_CLIENT_URL": "http://localhost:3000",
-            "BATCH_CLIENT_ID": "",
+            "BATCH_APP_CLIENT_ID": "",
             "BATCH_CLIENT_SCOPE": "dalmarkit/bo.adm",
             "IAM_URL": "https://dalmarkit-signin.example.com"
         }

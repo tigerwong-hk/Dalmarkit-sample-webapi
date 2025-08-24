@@ -7,7 +7,7 @@
 
 ######### Backoffice Client
 
-@backofficeClientId = {{BACKOFFICE_CLIENT_ID}}
+@backofficeAppClientId = {{BACKOFFICE_APP_CLIENT_ID}}
 @backofficeClientRedirectUrl = {{BACKOFFICE_CLIENT_REDIRECT_URL}}
 @backofficeClientScope = {{BACKOFFICE_CLIENT_SCOPE}}
 @backofficeClientUrl = {{BACKOFFICE_CLIENT_URL}}
@@ -15,7 +15,7 @@
 
 ######### Community Client
 
-@communityClientId = {{COMMUNITY_CLIENT_ID}}
+@communityAppClientId = {{COMMUNITY_APP_CLIENT_ID}}
 @communityClientRedirectUrl = {{COMMUNITY_CLIENT_REDIRECT_URL}}
 @communityClientScope = {{COMMUNITY_CLIENT_SCOPE}}
 @communityClientUrl = {{COMMUNITY_CLIENT_URL}}
@@ -23,7 +23,7 @@
 
 ######### Tenant Client
 
-@tenantClientId = {{TENANT_CLIENT_ID}}
+@tenantAppClientId = {{TENANT_APP_CLIENT_ID}}
 @tenantClientRedirectUrl = {{TENANT_CLIENT_REDIRECT_URL}}
 @tenantClientScope = {{TENANT_CLIENT_SCOPE}}
 @tenantClientUrl = {{TENANT_CLIENT_URL}}
@@ -31,7 +31,7 @@
 
 ######### Batch Client
 
-@batchClientId = {{BATCH_CLIENT_ID}}
+@batchAppClientId = {{BATCH_APP_CLIENT_ID}}
 @batchClientSecret = {{$dotenv BATCH_CLIENT_SECRET}}
 @batchClientScope = {{BATCH_CLIENT_SCOPE}}
 
@@ -75,12 +75,12 @@
 ######### Backoffice Portal
 
 # @name LoginForBackofficePortal
-GET {{oauth2AuthorizationEndpoint}}?client_id={{backofficeClientId}}&response_type=code&redirect_uri={{backofficeClientRedirectUrl}}&scope={{backofficeClientScope}}&state={{backofficeLoginRequestState}}&nonce={{$guid}}&code_challenge_method=S256&code_challenge=
+GET {{oauth2AuthorizationEndpoint}}?client_id={{backofficeAppClientId}}&response_type=code&redirect_uri={{backofficeClientRedirectUrl}}&scope={{backofficeClientScope}}&state={{backofficeLoginRequestState}}&nonce={{$guid}}&code_challenge_method=S256&code_challenge=
 
 ###
 
 # @name LogoutForBackofficePortal
-GET {{oauth2LogoutEndpoint}}?client_id={{backofficeClientId}}&logout_uri={{backofficeClientRedirectUrl}}
+GET {{oauth2LogoutEndpoint}}?client_id={{backofficeAppClientId}}&logout_uri={{backofficeClientRedirectUrl}}
 
 ###
 
@@ -90,7 +90,7 @@ Content-Type: application/x-www-form-urlencoded
 Origin: {{backofficeClientUrl}}
 
 grant_type=authorization_code
-&client_id={{backofficeClientId}}
+&client_id={{backofficeAppClientId}}
 &redirect_uri={{backofficeClientRedirectUrl}}
 &scope={{backofficeClientScope}}
 &code=
@@ -104,18 +104,18 @@ Content-Type: application/x-www-form-urlencoded
 Origin: {{backofficeClientUrl}}
 
 grant_type=refresh_token
-&client_id={{backofficeClientId}}
+&client_id={{backofficeAppClientId}}
 &refresh_token={{backofficeAdminRefreshToken}}
 
 ######### Tenant Portal
 
 # @name LoginForTenantPortal
-GET {{oauth2AuthorizationEndpoint}}?client_id={{tenantClientId}}&response_type=code&redirect_uri={{tenantClientRedirectUrl}}&scope={{tenantClientScope}}&state={{tenantLoginRequestState}}&nonce={{$guid}}&code_challenge_method=S256&code_challenge=
+GET {{oauth2AuthorizationEndpoint}}?client_id={{tenantAppClientId}}&response_type=code&redirect_uri={{tenantClientRedirectUrl}}&scope={{tenantClientScope}}&state={{tenantLoginRequestState}}&nonce={{$guid}}&code_challenge_method=S256&code_challenge=
 
 ###
 
 # @name LogoutForTenantPortal
-GET {{oauth2LogoutEndpoint}}?client_id={{tenantClientId}}&logout_uri={{tenantClientRedirectUrl}}
+GET {{oauth2LogoutEndpoint}}?client_id={{tenantAppClientId}}&logout_uri={{tenantClientRedirectUrl}}
 
 ###
 
@@ -125,7 +125,7 @@ Content-Type: application/x-www-form-urlencoded
 Origin: {{tenantClientUrl}}
 
 grant_type=authorization_code
-&client_id={{tenantClientId}}
+&client_id={{tenantAppClientId}}
 &redirect_uri={{tenantClientRedirectUrl}}
 &scope={{tenantClientScope}}
 &code=
@@ -139,7 +139,7 @@ Content-Type: application/x-www-form-urlencoded
 Origin: {{tenantClientUrl}}
 
 grant_type=authorization_code
-&client_id={{tenantClientId}}
+&client_id={{tenantAppClientId}}
 &redirect_uri={{tenantClientRedirectUrl}}
 &scope={{tenantClientScope}}
 &code=
@@ -153,7 +153,7 @@ Content-Type: application/x-www-form-urlencoded
 Origin: {{tenantClientUrl}}
 
 grant_type=refresh_token
-&client_id={{tenantClientId}}
+&client_id={{tenantAppClientId}}
 &refresh_token={{tenantAdmin01RefreshToken}}
 
 ###
@@ -164,18 +164,18 @@ Content-Type: application/x-www-form-urlencoded
 Origin: {{tenantClientUrl}}
 
 grant_type=refresh_token
-&client_id={{tenantClientId}}
+&client_id={{tenantAppClientId}}
 &refresh_token={{tenantAdmin02RefreshToken}}
 
 ######### Community Portal
 
 # @name LoginForCommunityPortal
-GET {{oauth2AuthorizationEndpoint}}?client_id={{communityClientId}}&response_type=code&redirect_uri={{communityClientRedirectUrl}}&scope={{communityClientScope}}&state={{communityLoginRequestState}}&nonce={{$guid}}&code_challenge_method=S256&code_challenge=
+GET {{oauth2AuthorizationEndpoint}}?client_id={{communityAppClientId}}&response_type=code&redirect_uri={{communityClientRedirectUrl}}&scope={{communityClientScope}}&state={{communityLoginRequestState}}&nonce={{$guid}}&code_challenge_method=S256&code_challenge=
 
 ###
 
 # @name LogoutForCommunityPortal
-GET {{oauth2LogoutEndpoint}}?client_id={{communityClientId}}&logout_uri={{communityClientRedirectUrl}}
+GET {{oauth2LogoutEndpoint}}?client_id={{communityAppClientId}}&logout_uri={{communityClientRedirectUrl}}
 
 ###
 
@@ -185,7 +185,7 @@ Content-Type: application/x-www-form-urlencoded
 Origin: {{communityClientUrl}}
 
 grant_type=authorization_code
-&client_id={{communityClientId}}
+&client_id={{communityAppClientId}}
 &redirect_uri={{communityClientRedirectUrl}}
 &scope={{communityClientScope}}
 &code=
@@ -199,7 +199,7 @@ Content-Type: application/x-www-form-urlencoded
 Origin: {{communityClientUrl}}
 
 grant_type=refresh_token
-&client_id={{communityClientId}}
+&client_id={{communityAppClientId}}
 &refresh_token={{communityUserRefreshToken}}
 
 ######### Batch Process
@@ -209,7 +209,7 @@ POST {{oauth2TokenEndpoint}}
 Content-Type: application/x-www-form-urlencoded
 
 grant_type=client_credentials
-&client_id={{batchClientId}}
+&client_id={{batchAppClientId}}
 &client_secret={{batchClientSecret}}
 &scope={{batchClientScope}}
 
@@ -475,7 +475,7 @@ Authorization: Bearer {{tenantAdmin02AccessToken}}
 ###### DeleteEntityImage
 
 # @name DeleteEntityImageAsAnonymousUnauthorized
-DELETE {{apiUrl}}/DeleteEntityImage
+DELETE {{apiUrl}}Upload/DeleteEntityImage
 Content-Type: application/json
 
 {
@@ -485,7 +485,7 @@ Content-Type: application/json
 ###
 
 # @name DeleteEntityImageAsBackofficeAdminSuccess
-DELETE {{apiUrl}}/DeleteEntityImage
+DELETE {{apiUrl}}Upload/DeleteEntityImage
 Content-Type: application/json
 Authorization: Bearer {{backofficeAdminAccessToken}}
 
@@ -496,7 +496,7 @@ Authorization: Bearer {{backofficeAdminAccessToken}}
 ###
 
 # @name DeleteEntityImageAsTenantAdmin01Forbidden
-DELETE {{apiUrl}}/DeleteEntityImage
+DELETE {{apiUrl}}Upload/DeleteEntityImage
 Content-Type: application/json
 Authorization: Bearer {{tenantAdmin01AccessToken}}
 
@@ -507,7 +507,7 @@ Authorization: Bearer {{tenantAdmin01AccessToken}}
 ###
 
 # @name DeleteEntityImageAsTenantAdmin02Forbidden
-DELETE {{apiUrl}}/DeleteEntityImage
+DELETE {{apiUrl}}Upload/DeleteEntityImage
 Content-Type: application/json
 Authorization: Bearer {{tenantAdmin02AccessToken}}
 
@@ -518,7 +518,7 @@ Authorization: Bearer {{tenantAdmin02AccessToken}}
 ###### UploadEntityImage
 
 # @name UploadEntityImageAsAnonymousUnauthorized
-POST {{apiUrl}}/UploadEntityImage
+POST {{apiUrl}}Upload/UploadEntityImage
 Content-Type: multipart/form-data; boundary=---------------------------16647115233043073543070130372
 
 -----------------------------16647115233043073543070130372
@@ -543,7 +543,7 @@ Content-Type: image/jpeg
 ###
 
 # @name UploadEntityImageAsBackofficeAdminSuccess
-POST {{apiUrl}}/UploadEntityImage
+POST {{apiUrl}}Upload/UploadEntityImage
 Content-Type: multipart/form-data; boundary=---------------------------16647115233043073543070130372
 Authorization: Bearer {{backofficeAdminAccessToken}}
 
@@ -569,7 +569,7 @@ Content-Type: image/jpeg
 ###
 
 # @name UploadEntityImageAsTenantAdmin01Forbidden
-POST {{apiUrl}}/UploadEntityImage
+POST {{apiUrl}}Upload/UploadEntityImage
 Content-Type: multipart/form-data; boundary=---------------------------16647115233043073543070130372
 Authorization: Bearer {{tenantAdmin01AccessToken}}
 
@@ -595,7 +595,7 @@ Content-Type: image/jpeg
 ###
 
 # @name UploadEntityImageAsTenantAdmin02Forbidden
-POST {{apiUrl}}/UploadEntityImage
+POST {{apiUrl}}Upload/UploadEntityImage
 Content-Type: multipart/form-data; boundary=---------------------------16647115233043073543070130372
 Authorization: Bearer {{tenantAdmin02AccessToken}}
 
@@ -621,7 +621,7 @@ Content-Type: image/jpeg
 ###
 
 # @name UploadEntityImageAsBackofficeAdminFailMultipartBodyLengthLimitExceeded
-POST {{apiUrl}}/UploadEntityImage
+POST {{apiUrl}}Upload/UploadEntityImage
 Content-Type: multipart/form-data; boundary=---------------------------16647115233043073543070130372
 Authorization: Bearer {{backofficeAdminAccessToken}}
 

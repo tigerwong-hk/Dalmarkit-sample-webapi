@@ -76,9 +76,9 @@ try
     AwsCognitoAuthenticationOptions? authenticationOptions = builder.Configuration.GetSection("AwsCognitoAuthenticationOptions").Get<AwsCognitoAuthenticationOptions>();
     _ = Guard.NotNull(authenticationOptions, nameof(authenticationOptions));
 
-    _ = Guard.NotNullOrWhiteSpace(authenticationOptions!.ValidClientIds, nameof(authenticationOptions.ValidClientIds));
-    string[] validClientIds = authenticationOptions.ValidClientIds!.Trim().Split(' ');
-    if (validClientIds.Length < 1)
+    _ = Guard.NotNullOrWhiteSpace(authenticationOptions!.ValidAppClientIds, nameof(authenticationOptions.ValidAppClientIds));
+    string[] validAppClientIds = authenticationOptions.ValidAppClientIds!.Trim().Split(' ');
+    if (validAppClientIds.Length < 1)
     {
         throw new InvalidOperationException("No valid client IDs.");
     }
@@ -89,7 +89,7 @@ try
             options.RequireHttpsMetadata = !builder.Environment.IsDevelopment();
             options.TokenValidationParameters = new TokenValidationParameters
             {
-                ValidAudiences = validClientIds,
+                ValidAudiences = validAppClientIds,
                 ValidateAudience = true,
                 ValidIssuer = authenticationOptions.IssuerBaseUrl + authenticationOptions.UserPoolId,
                 ValidateIssuer = true,
@@ -155,9 +155,9 @@ try
     string[] allowedCommunityUserScopes = string.IsNullOrWhiteSpace(authorizationOptions.CommunityUserScopes) ?
         [] : authorizationOptions.CommunityUserScopes.Trim().Split(' ');
 
-    _ = Guard.NotNull(authorizationOptions.BackofficeAdminClientIds, nameof(authorizationOptions.BackofficeAdminClientIds));
-    string[] allowedBackofficeAdminClientIds = string.IsNullOrWhiteSpace(authorizationOptions.BackofficeAdminClientIds) ?
-        [] : authorizationOptions.BackofficeAdminClientIds.Trim().Split(' ');
+    _ = Guard.NotNull(authorizationOptions.BackofficeAdminAppClientIds, nameof(authorizationOptions.BackofficeAdminAppClientIds));
+    string[] allowedBackofficeAdminAppClientIds = string.IsNullOrWhiteSpace(authorizationOptions.BackofficeAdminAppClientIds) ?
+        [] : authorizationOptions.BackofficeAdminAppClientIds.Trim().Split(' ');
 
     _ = Guard.NotNull(authorizationOptions.BackofficeAdminGroups, nameof(authorizationOptions.BackofficeAdminGroups));
     string[] allowedBackofficeAdminGroups = string.IsNullOrWhiteSpace(authorizationOptions.BackofficeAdminGroups) ?
@@ -178,8 +178,8 @@ try
     _ = builder.Services.AddAuthorizationBuilder()
         .AddPolicy(nameof(AwsCognitoAuthorizationOptions.CommunityUserScopes), policyBuilder =>
             _ = policyBuilder.RequireScope(AwsCognitoJwtClaims.Scope, allowedCommunityUserScopes))
-        .AddPolicy(nameof(AwsCognitoAuthorizationOptions.BackofficeAdminClientIds), policyBuilder =>
-            _ = policyBuilder.RequireClaim(AwsCognitoJwtClaims.ClientId, allowedBackofficeAdminClientIds))
+        .AddPolicy(nameof(AwsCognitoAuthorizationOptions.BackofficeAdminAppClientIds), policyBuilder =>
+            _ = policyBuilder.RequireClaim(AwsCognitoJwtClaims.ClientId, allowedBackofficeAdminAppClientIds))
         .AddPolicy(nameof(AwsCognitoAuthorizationOptions.BackofficeAdminGroups), policyBuilder =>
             _ = policyBuilder.RequireClaim(AwsCognitoJwtClaims.CognitoGroups, allowedBackofficeAdminGroups))
         .AddPolicy(nameof(AwsCognitoAuthorizationOptions.BackofficeAdminScopes), policyBuilder =>

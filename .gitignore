@@ -5,6 +5,10 @@
 bin/
 obj/
 
+# Coverage/Test results
+coveragereport/
+TestResults/
+
 # Dotenv files
 .env
 .env.*

@@ -44,7 +44,7 @@ CREATE TABLE "AuditLogs" (
 CREATE TABLE "Entities" (
     "EntityId" uuid NOT NULL DEFAULT (gen_random_uuid()),
     "EntityName" text NOT NULL,
-    "ClientId" text NOT NULL,
+    "AppClientId" text NOT NULL,
     "CreatedOn" timestamp with time zone NOT NULL DEFAULT (now() at time zone 'utc'),
     "CreateRequestId" text NOT NULL,
     "CreatorId" text NOT NULL,
@@ -61,7 +61,7 @@ CREATE TABLE "EvmEvents" (
     "TransactionHash" text NOT NULL,
     "BlockchainNetwork" character varying(20) NOT NULL,
     "EventDetail" jsonb NOT NULL,
-    "ClientId" text NOT NULL,
+    "AppClientId" text NOT NULL,
     "CreatedOn" timestamp with time zone NOT NULL DEFAULT (now() at time zone 'utc'),
     "CreateRequestId" text NOT NULL,
     "CreatorId" text NOT NULL,
@@ -72,7 +72,7 @@ CREATE TABLE "DependentEntities" (
     "DependentEntityId" uuid NOT NULL DEFAULT (gen_random_uuid()),
     "DependentEntityName" text NOT NULL,
     "EntityId" uuid NOT NULL,
-    "ClientId" text NOT NULL,
+    "AppClientId" text NOT NULL,
     "CreatedOn" timestamp with time zone NOT NULL DEFAULT (now() at time zone 'utc'),
     "CreateRequestId" text NOT NULL,
     "CreatorId" text NOT NULL,
@@ -87,7 +87,7 @@ CREATE TABLE "DependentEntities" (
 CREATE TABLE "EntityImages" (
     "EntityImageId" uuid NOT NULL DEFAULT (gen_random_uuid()),
     "EntityId" uuid NOT NULL,
-    "ClientId" text NOT NULL,
+    "AppClientId" text NOT NULL,
     "CreatedOn" timestamp with time zone NOT NULL DEFAULT (now() at time zone 'utc'),
     "CreateRequestId" text NOT NULL,
     "CreatorId" text NOT NULL,
@@ -132,9 +132,9 @@ CREATE INDEX "IX_AuditLogs_TraceId" ON "AuditLogs" ("TraceId");
 
 CREATE INDEX "IX_AuditLogs_UserId" ON "AuditLogs" ("UserId");
 
-CREATE INDEX "IX_DependentEntities_ClientId" ON "DependentEntities" ("ClientId");
+CREATE INDEX "IX_DependentEntities_AppClientId" ON "DependentEntities" ("AppClientId");
 
-CREATE UNIQUE INDEX "IX_DependentEntities_CreateRequestId_ClientId_EntityHash" ON "DependentEntities" ("CreateRequestId", "ClientId", "EntityHash");
+CREATE UNIQUE INDEX "IX_DependentEntities_CreateRequestId_AppClientId_EntityHash" ON "DependentEntities" ("CreateRequestId", "AppClientId", "EntityHash");
 
 CREATE INDEX "IX_DependentEntities_CreatedOn" ON "DependentEntities" ("CreatedOn");
 
@@ -148,9 +148,9 @@ CREATE INDEX "IX_DependentEntities_ModifiedOn" ON "DependentEntities" ("Modified
 
 CREATE INDEX "IX_DependentEntities_ModifierId" ON "DependentEntities" ("ModifierId");
 
-CREATE INDEX "IX_Entities_ClientId" ON "Entities" ("ClientId");
+CREATE INDEX "IX_Entities_AppClientId" ON "Entities" ("AppClientId");
 
-CREATE UNIQUE INDEX "IX_Entities_CreateRequestId_ClientId" ON "Entities" ("CreateRequestId", "ClientId");
+CREATE UNIQUE INDEX "IX_Entities_CreateRequestId_AppClientId" ON "Entities" ("CreateRequestId", "AppClientId");
 
 CREATE INDEX "IX_Entities_CreatedOn" ON "Entities" ("CreatedOn");
 
@@ -162,9 +162,9 @@ CREATE INDEX "IX_Entities_ModifiedOn" ON "Entities" ("ModifiedOn");
 
 CREATE INDEX "IX_Entities_ModifierId" ON "Entities" ("ModifierId");
 
-CREATE INDEX "IX_EntityImages_ClientId" ON "EntityImages" ("ClientId");
+CREATE INDEX "IX_EntityImages_AppClientId" ON "EntityImages" ("AppClientId");
 
-CREATE UNIQUE INDEX "IX_EntityImages_CreateRequestId_ClientId" ON "EntityImages" ("CreateRequestId", "ClientId");
+CREATE UNIQUE INDEX "IX_EntityImages_CreateRequestId_AppClientId" ON "EntityImages" ("CreateRequestId", "AppClientId");
 
 CREATE INDEX "IX_EntityImages_CreatedOn" ON "EntityImages" ("CreatedOn");
 
@@ -178,16 +178,16 @@ CREATE INDEX "IX_EntityImages_ModifierId" ON "EntityImages" ("ModifierId");
 
 CREATE UNIQUE INDEX "IX_EntityImages_ObjectName_EntityId" ON "EntityImages" ("ObjectName", "EntityId") WHERE "IsDeleted" = false;
 
-CREATE INDEX "IX_EvmEvents_ClientId" ON "EvmEvents" ("ClientId");
+CREATE INDEX "IX_EvmEvents_AppClientId" ON "EvmEvents" ("AppClientId");
 
-CREATE UNIQUE INDEX "IX_EvmEvents_CreateRequestId_ClientId" ON "EvmEvents" ("CreateRequestId", "ClientId");
+CREATE UNIQUE INDEX "IX_EvmEvents_CreateRequestId_AppClientId" ON "EvmEvents" ("CreateRequestId", "AppClientId");
 
 CREATE INDEX "IX_EvmEvents_CreatedOn" ON "EvmEvents" ("CreatedOn");
 
 CREATE INDEX "IX_EvmEvents_CreatorId" ON "EvmEvents" ("CreatorId");
 
 INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-VALUES ('20250610082241_InitialCreate', '8.0.11');
+VALUES ('20250824123829_InitialCreate', '8.0.11');
 
 COMMIT;
 

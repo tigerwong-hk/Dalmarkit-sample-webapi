@@ -1,11 +1,11 @@
-using AutoMapper;
 using Dalmarkit.Blockchain.Constants;
 using Dalmarkit.Blockchain.Evm.Services;
 using Dalmarkit.Common.Api.Responses;
 using Dalmarkit.Common.Errors;
 using Dalmarkit.Common.Validation;
-using Dalmarkit.EntityFrameworkCore.Mappers;
 using Dalmarkit.EntityFrameworkCore.Services.ApplicationServices;
+using Dalmarkit.Sample.Application.Mapping.EntitiesToOutputDtos;
+using Dalmarkit.Sample.Application.Mapping.InputDtosToInputDtos;
 using Dalmarkit.Sample.Application.Options;
 using Dalmarkit.Sample.Application.Services.DataServices;
 using Dalmarkit.Sample.Application.Services.ExternalServices;
@@ -19,22 +19,19 @@ namespace Dalmarkit.Sample.Application.Services.ApplicationServices;
 
 public class DalmarkitSampleQueryService : ApplicationQueryServiceBase, IDalmarkitSampleQueryService
 {
-    private readonly IMapper _mapper;
     private readonly EntityOptions _entityOptions;
     private readonly IEntityDataService _entityDataService;
     private readonly IDependentEntityDataService _dependentEntityDataService;
     private readonly IEvmEventDataService _evmEventDataService;
     private readonly IEvmBlockchainService _evmBlockchainService;
 
-    public DalmarkitSampleQueryService(IMapper mapper,
+    public DalmarkitSampleQueryService(
         IOptions<EntityOptions> entityOptions,
         IEntityDataService entityDataService,
         IDependentEntityDataService dependentEntityDataService,
         IEvmEventDataService evmEventDataService,
-        IEvmBlockchainService evmBlockchainService) : base(mapper)
+        IEvmBlockchainService evmBlockchainService)
     {
-        _mapper = Guard.NotNull(mapper, nameof(mapper));
-
         _entityOptions = Guard.NotNull(entityOptions, nameof(entityOptions)).Value;
         _ = Guard.NotNullOrWhiteSpace(_entityOptions.ImageS3BucketName, nameof(_entityOptions.ImageS3BucketName));
         _ = Guard.NotNullOrWhiteSpace(_entityOptions.ImageRootFolderName, nameof(_entityOptions.ImageRootFolderName));
@@ -54,18 +51,15 @@ public class DalmarkitSampleQueryService : ApplicationQueryServiceBase, IDalmark
             return Error<EntityDetailOutputDto>(ErrorTypes.ResourceNotFound, "Entity", inputDto.EntityId);
         }
 
-        EntityDetailOutputDto? output = _mapper.Map<EntityDetailOutputDto>(entityDetail, opt =>
-        {
-            opt.Items[MapperItemKeys.BucketName] = _entityOptions.ImageS3BucketName;
-            opt.Items[MapperItemKeys.RootFolderName] = _entityOptions.ImageRootFolderName;
-        });
+        EntityEntityToOutputDtoMapper entityEntityToOutputDtoMapper = new(_entityOptions.ImageS3BucketName!, _entityOptions.ImageRootFolderName!);
+        EntityDetailOutputDto output = entityEntityToOutputDtoMapper.ToTarget(entityDetail);
 
         return Ok(output);
     }
 
     public async Task<Result<ResponsePagination<EntityOutputDto>, ErrorDetail>> GetEntitiesAsync(GetEntitiesInputDto inputDto, CancellationToken cancellationToken = default)
     {
-        GetEntityListInputDto entityListInputDto = _mapper.Map<GetEntityListInputDto>(inputDto);
+        GetEntityListInputDto entityListInputDto = EntityInputDtoToInputDtoMapper.ToTarget(inputDto);
 
         return await GetEntityListAsync(entityListInputDto, cancellationToken);
     }
@@ -73,11 +67,9 @@ public class DalmarkitSampleQueryService : ApplicationQueryServiceBase, IDalmark
     public async Task<Result<ResponsePagination<EntityOutputDto>, ErrorDetail>> GetEntityListAsync(GetEntityListInputDto inputDto, CancellationToken cancellationToken = default)
     {
         ResponsePagination<Entity> entityList = await _entityDataService.GetEntityListAsync(inputDto, cancellationToken);
-        IEnumerable<EntityOutputDto> output = _mapper.Map<IEnumerable<EntityOutputDto>>(entityList.Data, opt =>
-        {
-            opt.Items[MapperItemKeys.BucketName] = _entityOptions.ImageS3BucketName;
-            opt.Items[MapperItemKeys.RootFolderName] = _entityOptions.ImageRootFolderName;
-        });
+
+        EntityEntityToOutputDtoMapper entityEntityToOutputDtoMapper = new(_entityOptions.ImageS3BucketName!, _entityOptions.ImageRootFolderName!);
+        IEnumerable<EntityOutputDto> output = entityEntityToOutputDtoMapper.ToTarget(entityList.Data);
 
         return Ok(new ResponsePagination<EntityOutputDto>(output, entityList.FilteredCount, entityList.PageNumber, entityList.PageSize));
     }
@@ -92,7 +84,7 @@ public class DalmarkitSampleQueryService : ApplicationQueryServiceBase, IDalmark
             return Error<DependentEntityDetailOutputDto>(ErrorTypes.ResourceNotFound, "DependentEntity", inputDto.DependentEntityId);
         }
 
-        DependentEntityDetailOutputDto output = _mapper.Map<DependentEntityDetailOutputDto>(dependentEntity);
+        DependentEntityDetailOutputDto output = DependentEntityEntityToOutputDtoMapper.ToTarget(dependentEntity);
 
         return Ok(output);
     }
@@ -100,7 +92,7 @@ public class DalmarkitSampleQueryService : ApplicationQueryServiceBase, IDalmark
     public async Task<Result<IEnumerable<DependentEntityOutputDto>, ErrorDetail>> GetDependentEntitiesAsync(GetDependentEntitiesInputDto inputDto, CancellationToken cancellationToken = default)
     {
         IEnumerable<DependentEntity> dependentEntities = await _dependentEntityDataService.GetDependentEntitiesAsync(inputDto.EntityId, cancellationToken);
-        IEnumerable<DependentEntityOutputDto> output = _mapper.Map<IEnumerable<DependentEntityOutputDto>>(dependentEntities);
+        IEnumerable<DependentEntityOutputDto> output = DependentEntityEntityToOutputDtoMapper.ToTarget(dependentEntities);
 
         return Ok(output);
     }
@@ -115,7 +107,7 @@ public class DalmarkitSampleQueryService : ApplicationQueryServiceBase, IDalmark
             return Error<EvmEventInfoOutputDto>(ErrorTypes.ResourceNotFound, "EvmEvent", inputDto.EvmEventId);
         }
 
-        EvmEventInfoOutputDto? output = _mapper.Map<EvmEventInfoOutputDto>(evmEventInfo);
+        EvmEventInfoOutputDto output = EvmEventEntityToOutputDtoMapper.ToTarget(evmEventInfo);
 
         return Ok(output);
     }
@@ -123,15 +115,15 @@ public class DalmarkitSampleQueryService : ApplicationQueryServiceBase, IDalmark
     public async Task<Result<ResponsePagination<EvmEventOutputDto>, ErrorDetail>> GetEvmEventsAsync(GetEvmEventsInputDto inputDto, CancellationToken cancellationToken = default)
     {
         ResponsePagination<EvmEvent> evmEvents = await _evmEventDataService.GetEvmEventsAsync(inputDto, cancellationToken);
-        IEnumerable<EvmEventOutputDto> output = _mapper.Map<IEnumerable<EvmEventOutputDto>>(evmEvents.Data);
+        IEnumerable<EvmEventOutputDto> output = EvmEventEntityToOutputDtoMapper.ToTarget(evmEvents.Data);
 
         return Ok(new ResponsePagination<EvmEventOutputDto>(output, evmEvents.FilteredCount, evmEvents.PageNumber, evmEvents.PageSize));
     }
 
-    public async Task<Result<GetNonFungiblePositionManagerPositionsOutputDto, ErrorDetail>> GetNonFungiblePositionManagerPositionsAsync(GetNonFungiblePositionManagerPositionsInputDto inputDto, CancellationToken cancellationToken = default)
+    public async Task<Result<GetNonFungiblePositionManagerPositionsOutputDto?, ErrorDetail>> GetNonFungiblePositionManagerPositionsAsync(GetNonFungiblePositionManagerPositionsInputDto inputDto, CancellationToken cancellationToken = default)
     {
         PositionsOutputDTO? positionsOutput = await _evmBlockchainService.CallNonFungiblePositionManagerPositionsFunctionAsync(inputDto.TokenId, inputDto.BlockchainNetwork);
-        GetNonFungiblePositionManagerPositionsOutputDto output = _mapper.Map<GetNonFungiblePositionManagerPositionsOutputDto>(positionsOutput);
+        GetNonFungiblePositionManagerPositionsOutputDto? output = positionsOutput == null ? null : PositionsOutputDtoToOutputDtoMapper.ToTarget(positionsOutput);
 
         return Ok(output);
     }
@@ -139,7 +131,12 @@ public class DalmarkitSampleQueryService : ApplicationQueryServiceBase, IDalmark
     public async Task<Result<List<GetLooksRareExchangeRoyaltyPaymentEventOutputDto>, ErrorDetail>> GetLooksRareExchangeRoyaltyPaymentEventAsync(GetLooksRareExchangeRoyaltyPaymentEventInputDto inputDto, CancellationToken cancellationToken = default)
     {
         List<RoyaltyPaymentEventDTO>? royaltyPaymentEvents = await _evmBlockchainService.GetLooksRareExchangeRoyaltyPaymentEventAsync(inputDto.TransactionHash, inputDto.BlockchainNetwork);
-        List<GetLooksRareExchangeRoyaltyPaymentEventOutputDto> output = _mapper.Map<List<GetLooksRareExchangeRoyaltyPaymentEventOutputDto>>(royaltyPaymentEvents);
+        if (royaltyPaymentEvents == null)
+        {
+            return Ok(new List<GetLooksRareExchangeRoyaltyPaymentEventOutputDto>());
+        }
+
+        List<GetLooksRareExchangeRoyaltyPaymentEventOutputDto> output = RoyaltyPaymentEventOutputDtoToOutputDtoMapper.ToTarget(royaltyPaymentEvents);
 
         return Ok(output);
     }

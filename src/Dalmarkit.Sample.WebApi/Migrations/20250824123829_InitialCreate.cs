@@ -67,7 +67,7 @@ namespace Dalmarkit.Sample.WebApi.Migrations
                 {
                     EntityId = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
                     EntityName = table.Column<string>(type: "text", nullable: false),
-                    ClientId = table.Column<string>(type: "text", nullable: false),
+                    AppClientId = table.Column<string>(type: "text", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now() at time zone 'utc'"),
                     CreateRequestId = table.Column<string>(type: "text", nullable: false),
                     CreatorId = table.Column<string>(type: "text", nullable: false),
@@ -90,7 +90,7 @@ namespace Dalmarkit.Sample.WebApi.Migrations
                     TransactionHash = table.Column<string>(type: "text", nullable: false),
                     BlockchainNetwork = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
                     EventDetail = table.Column<string>(type: "jsonb", nullable: false),
-                    ClientId = table.Column<string>(type: "text", nullable: false),
+                    AppClientId = table.Column<string>(type: "text", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now() at time zone 'utc'"),
                     CreateRequestId = table.Column<string>(type: "text", nullable: false),
                     CreatorId = table.Column<string>(type: "text", nullable: false)
@@ -107,7 +107,7 @@ namespace Dalmarkit.Sample.WebApi.Migrations
                     DependentEntityId = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
                     DependentEntityName = table.Column<string>(type: "text", nullable: false),
                     EntityId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ClientId = table.Column<string>(type: "text", nullable: false),
+                    AppClientId = table.Column<string>(type: "text", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now() at time zone 'utc'"),
                     CreateRequestId = table.Column<string>(type: "text", nullable: false),
                     CreatorId = table.Column<string>(type: "text", nullable: false),
@@ -133,7 +133,7 @@ namespace Dalmarkit.Sample.WebApi.Migrations
                 {
                     EntityImageId = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
                     EntityId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ClientId = table.Column<string>(type: "text", nullable: false),
+                    AppClientId = table.Column<string>(type: "text", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now() at time zone 'utc'"),
                     CreateRequestId = table.Column<string>(type: "text", nullable: false),
                     CreatorId = table.Column<string>(type: "text", nullable: false),
@@ -236,14 +236,14 @@ namespace Dalmarkit.Sample.WebApi.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DependentEntities_ClientId",
+                name: "IX_DependentEntities_AppClientId",
                 table: "DependentEntities",
-                column: "ClientId");
+                column: "AppClientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DependentEntities_CreateRequestId_ClientId_EntityHash",
+                name: "IX_DependentEntities_CreateRequestId_AppClientId_EntityHash",
                 table: "DependentEntities",
-                columns: new[] { "CreateRequestId", "ClientId", "EntityHash" },
+                columns: new[] { "CreateRequestId", "AppClientId", "EntityHash" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -279,14 +279,14 @@ namespace Dalmarkit.Sample.WebApi.Migrations
                 column: "ModifierId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Entities_ClientId",
+                name: "IX_Entities_AppClientId",
                 table: "Entities",
-                column: "ClientId");
+                column: "AppClientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Entities_CreateRequestId_ClientId",
+                name: "IX_Entities_CreateRequestId_AppClientId",
                 table: "Entities",
-                columns: new[] { "CreateRequestId", "ClientId" },
+                columns: new[] { "CreateRequestId", "AppClientId" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -317,14 +317,14 @@ namespace Dalmarkit.Sample.WebApi.Migrations
                 column: "ModifierId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EntityImages_ClientId",
+                name: "IX_EntityImages_AppClientId",
                 table: "EntityImages",
-                column: "ClientId");
+                column: "AppClientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EntityImages_CreateRequestId_ClientId",
+                name: "IX_EntityImages_CreateRequestId_AppClientId",
                 table: "EntityImages",
-                columns: new[] { "CreateRequestId", "ClientId" },
+                columns: new[] { "CreateRequestId", "AppClientId" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -360,14 +360,14 @@ namespace Dalmarkit.Sample.WebApi.Migrations
                 filter: "\"IsDeleted\" = false");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EvmEvents_ClientId",
+                name: "IX_EvmEvents_AppClientId",
                 table: "EvmEvents",
-                column: "ClientId");
+                column: "AppClientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EvmEvents_CreateRequestId_ClientId",
+                name: "IX_EvmEvents_CreateRequestId_AppClientId",
                 table: "EvmEvents",
-                columns: new[] { "CreateRequestId", "ClientId" },
+                columns: new[] { "CreateRequestId", "AppClientId" },
                 unique: true);
 
             migrationBuilder.CreateIndex(

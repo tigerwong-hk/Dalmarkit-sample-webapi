@@ -1,4 +1,3 @@
-using AutoMapper.Configuration.Annotations;
 using Dalmarkit.Common.Entities.BaseEntities;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
@@ -9,7 +8,6 @@ public class DependentEntity : DependentReadWriteEntityBase
 {
     [Key]
     [Required]
-    [Ignore]
     public Guid DependentEntityId { get; set; }
 
     [Required]
@@ -17,7 +15,6 @@ public class DependentEntity : DependentReadWriteEntityBase
 
     #region Foreign Key
     [Required]
-    [Ignore]
     public Guid EntityId { get; set; }
     #endregion Foreign Key
 

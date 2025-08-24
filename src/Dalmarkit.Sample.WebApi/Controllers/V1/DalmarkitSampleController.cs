@@ -12,6 +12,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Dalmarkit.Blockchain.Evm.Services;
+using System.Text.Json;
+using System.Text.Encodings.Web;
+using System.Text.Json.Serialization;
 
 namespace Dalmarkit.Sample.WebApi.Controllers.V1
 {
@@ -25,6 +28,14 @@ namespace Dalmarkit.Sample.WebApi.Controllers.V1
         // public const int UploadImageMultipartBoundaryLengthLimitBytes = 128;
         // public const int UploadImageValueCountLimit = 1024;
         // public const int UploadImageValueLengthLimitBytes = 1024 * 1024 * 4;
+
+        private static readonly JsonSerializerOptions _jsonSerializerOptions = new(JsonSerializerDefaults.Web)
+        {
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            Converters = {
+                new JsonStringEnumConverter()
+            }
+        };
 
         private readonly IDalmarkitSampleQueryService _dalmarkitSampleQueryService;
         private readonly IDalmarkitSampleCommandService _dalmarkitSampleCommandService;
@@ -174,7 +185,7 @@ namespace Dalmarkit.Sample.WebApi.Controllers.V1
         {
             Result<EvmEventInfoOutputDto, ErrorDetail> result = await _dalmarkitSampleQueryService.GetEvmEventInfoAsync(inputDto);
 
-            return ApiResponse(result);
+            return ApiResponse(result, _jsonSerializerOptions);
         }
 
         [AllowAnonymous]
@@ -183,7 +194,7 @@ namespace Dalmarkit.Sample.WebApi.Controllers.V1
         {
             Result<ResponsePagination<EvmEventOutputDto>, ErrorDetail> result = await _dalmarkitSampleQueryService.GetEvmEventsAsync(inputDto);
 
-            return ApiResponse(result);
+            return ApiResponse(result, _jsonSerializerOptions);
         }
 
         [AllowAnonymous]
@@ -210,7 +221,7 @@ namespace Dalmarkit.Sample.WebApi.Controllers.V1
         {
             Result<string?, ErrorDetail> result = await _dalmarkitSampleQueryService.GetLooksRareExchangeRoyaltyPaymentEventByNameAsync(inputDto);
 
-            return ApiResponse(result);
+            return ApiResponse(result, _jsonSerializerOptions);
         }
 
         [AllowAnonymous]
@@ -219,7 +230,7 @@ namespace Dalmarkit.Sample.WebApi.Controllers.V1
         {
             Result<List<EvmEventDto>?, ErrorDetail> result = await _dalmarkitSampleQueryService.GetLooksRareExchangeRoyaltyPaymentEventsByNameAsync(inputDto);
 
-            return ApiResponse(result);
+            return ApiResponse(result, _jsonSerializerOptions);
         }
 
         [AllowAnonymous]
@@ -228,7 +239,7 @@ namespace Dalmarkit.Sample.WebApi.Controllers.V1
         {
             Result<string?, ErrorDetail> result = await _dalmarkitSampleQueryService.GetLooksRareExchangeRoyaltyPaymentEventBySha3SignatureAsync(inputDto);
 
-            return ApiResponse(result);
+            return ApiResponse(result, _jsonSerializerOptions);
         }
 
         [Authorize(Policy = nameof(AwsCognitoAuthorizationOptions.BackofficeAdminScopes))]

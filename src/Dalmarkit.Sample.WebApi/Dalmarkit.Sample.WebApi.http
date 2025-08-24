@@ -475,7 +475,7 @@ Authorization: Bearer {{tenantAdmin02AccessToken}}
 ###### DeleteEntityImage
 
 # @name DeleteEntityImageAsAnonymousUnauthorized
-DELETE {{apiUrl}}/DeleteEntityImage
+DELETE {{apiUrl}}Upload/DeleteEntityImage
 Content-Type: application/json
 
 {
@@ -485,7 +485,7 @@ Content-Type: application/json
 ###
 
 # @name DeleteEntityImageAsBackofficeAdminSuccess
-DELETE {{apiUrl}}/DeleteEntityImage
+DELETE {{apiUrl}}Upload/DeleteEntityImage
 Content-Type: application/json
 Authorization: Bearer {{backofficeAdminAccessToken}}
 
@@ -496,7 +496,7 @@ Authorization: Bearer {{backofficeAdminAccessToken}}
 ###
 
 # @name DeleteEntityImageAsTenantAdmin01Forbidden
-DELETE {{apiUrl}}/DeleteEntityImage
+DELETE {{apiUrl}}Upload/DeleteEntityImage
 Content-Type: application/json
 Authorization: Bearer {{tenantAdmin01AccessToken}}
 
@@ -507,7 +507,7 @@ Authorization: Bearer {{tenantAdmin01AccessToken}}
 ###
 
 # @name DeleteEntityImageAsTenantAdmin02Forbidden
-DELETE {{apiUrl}}/DeleteEntityImage
+DELETE {{apiUrl}}Upload/DeleteEntityImage
 Content-Type: application/json
 Authorization: Bearer {{tenantAdmin02AccessToken}}
 
@@ -518,7 +518,7 @@ Authorization: Bearer {{tenantAdmin02AccessToken}}
 ###### UploadEntityImage
 
 # @name UploadEntityImageAsAnonymousUnauthorized
-POST {{apiUrl}}/UploadEntityImage
+POST {{apiUrl}}Upload/UploadEntityImage
 Content-Type: multipart/form-data; boundary=---------------------------16647115233043073543070130372
 
 -----------------------------16647115233043073543070130372
@@ -543,7 +543,7 @@ Content-Type: image/jpeg
 ###
 
 # @name UploadEntityImageAsBackofficeAdminSuccess
-POST {{apiUrl}}/UploadEntityImage
+POST {{apiUrl}}Upload/UploadEntityImage
 Content-Type: multipart/form-data; boundary=---------------------------16647115233043073543070130372
 Authorization: Bearer {{backofficeAdminAccessToken}}
 
@@ -569,7 +569,7 @@ Content-Type: image/jpeg
 ###
 
 # @name UploadEntityImageAsTenantAdmin01Forbidden
-POST {{apiUrl}}/UploadEntityImage
+POST {{apiUrl}}Upload/UploadEntityImage
 Content-Type: multipart/form-data; boundary=---------------------------16647115233043073543070130372
 Authorization: Bearer {{tenantAdmin01AccessToken}}
 
@@ -595,7 +595,7 @@ Content-Type: image/jpeg
 ###
 
 # @name UploadEntityImageAsTenantAdmin02Forbidden
-POST {{apiUrl}}/UploadEntityImage
+POST {{apiUrl}}Upload/UploadEntityImage
 Content-Type: multipart/form-data; boundary=---------------------------16647115233043073543070130372
 Authorization: Bearer {{tenantAdmin02AccessToken}}
 
@@ -621,7 +621,7 @@ Content-Type: image/jpeg
 ###
 
 # @name UploadEntityImageAsBackofficeAdminFailMultipartBodyLengthLimitExceeded
-POST {{apiUrl}}/UploadEntityImage
+POST {{apiUrl}}Upload/UploadEntityImage
 Content-Type: multipart/form-data; boundary=---------------------------16647115233043073543070130372
 Authorization: Bearer {{backofficeAdminAccessToken}}
 

@@ -212,35 +212,35 @@ public class EvmBlockchainService : EvmBlockchainServiceBase, IEvmBlockchainServ
 public static partial class EvmBlockchainServiceLogs
 {
     [LoggerMessage(
-        EventId = 2,
+        EventId = 0,
         Level = LogLevel.Error,
         Message = "Contract addresses null for `{ContractName}`")]
     public static partial void ContractAddressesNullForError(
         this ILogger logger, string contractName);
 
     [LoggerMessage(
-        EventId = 0,
+        EventId = 1,
         Level = LogLevel.Error,
         Message = "`{ContractName}` contract address null or whitespace for blockchain network `{BlockchainNetwork}`")]
     public static partial void ContractAddressNullOrWhitespaceForError(
         this ILogger logger, string contractName, BlockchainNetwork blockchainNetwork);
 
     [LoggerMessage(
-        EventId = 1,
+        EventId = 2,
         Level = LogLevel.Error,
         Message = "Contract info not found for `{ContractName}`")]
     public static partial void ContractInfoNotFoundForError(
         this ILogger logger, string contractName);
 
     [LoggerMessage(
-        EventId = 2,
+        EventId = 3,
         Level = LogLevel.Error,
         Message = "Contract info null for `{ContractName}`")]
     public static partial void ContractInfoNullForError(
         this ILogger logger, string contractName);
 
     [LoggerMessage(
-        EventId = 3,
+        EventId = 4,
         Level = LogLevel.Error,
         Message = "`{ContractName}` JSON ABI file null or whitespace for blockchain network `{BlockchainNetwork}`")]
     public static partial void JsonAbiFileNullOrWhitespaceForError(

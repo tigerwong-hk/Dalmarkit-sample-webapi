@@ -2,7 +2,6 @@ using Moq;
 using Dalmarkit.Sample.WebApi.Controllers.V1;
 using Dalmarkit.Sample.Application.Services.ApplicationServices;
 using Dalmarkit.Sample.Application.Options;
-using Dalmarkit.Common.Validation;
 using Dalmarkit.Common.Api.Responses;
 using Dalmarkit.Common.Errors;
 using Dalmarkit.Sample.Core.Dtos.Inputs;
@@ -18,7 +17,6 @@ public class DalmarkitSampleControllerTest
 {
     private readonly Mock<IDalmarkitSampleQueryService> _mockQueryService;
     private readonly Mock<IDalmarkitSampleCommandService> _mockCommandService;
-    private readonly Mock<IImageValidatorService> _mockImageValidatorService;
     private readonly IOptions<EntityOptions> _entityOptions;
     private readonly DalmarkitSampleController _controller;
 
@@ -26,7 +24,6 @@ public class DalmarkitSampleControllerTest
     {
         _mockQueryService = new Mock<IDalmarkitSampleQueryService>();
         _mockCommandService = new Mock<IDalmarkitSampleCommandService>();
-        _mockImageValidatorService = new Mock<IImageValidatorService>();
         _entityOptions = Options.Create(new EntityOptions
         {
             ImageS3BucketName = "bucket",
@@ -39,7 +36,6 @@ public class DalmarkitSampleControllerTest
         _controller = new DalmarkitSampleController(
             _mockQueryService.Object,
             _mockCommandService.Object,
-            _mockImageValidatorService.Object,
             _entityOptions
         );
     }

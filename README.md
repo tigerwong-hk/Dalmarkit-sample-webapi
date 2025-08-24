@@ -36,8 +36,8 @@ Sample implementation of a ASP.NET Core web API using [Dalmarkit][dalmarkit]
 4. Create the following Systems Manager Parameter Store encrypted parameters:
 
     1. _/DalmarkitSample/Api/Development/AwsCognitoAuthenticationOptions/UserPoolId_ - Cognito user pool ID
-    2. _/DalmarkitSample/Api/Development/AwsCognitoAuthenticationOptions/ValidClientIds_ - space delimited list of client IDs allowed to access the web API (e.g. public backoffice client ID, public tenant client ID and confidential server-to-server client ID)
-    3. _/DalmarkitSample/Api/Development/AwsCognitoAuthorizationOptions/BackofficeAdminClientIds_ - confidential server to server client ID
+    2. _/DalmarkitSample/Api/Development/AwsCognitoAuthenticationOptions/ValidAppClientIds_ - space delimited list of client IDs allowed to access the web API (e.g. public backoffice client ID, public tenant client ID and confidential server-to-server client ID)
+    3. _/DalmarkitSample/Api/Development/AwsCognitoAuthorizationOptions/BackofficeAdminAppClientIds_ - confidential server to server client ID
     4. _/DalmarkitSample/Api/Development/ConnectionStrings/DefaultConnection_ - database connection string
     5. _/DalmarkitSample/Api/Development/EntityOptions/ImageS3BucketName_ - name of S3 bucket that will store uploaded images
     6. _/DalmarkitSample/Api/Development/EntityOptions/ImageCloudFrontDistributionId_ - ID of CloudFront distribution used to deliver images stored in S3 bucket

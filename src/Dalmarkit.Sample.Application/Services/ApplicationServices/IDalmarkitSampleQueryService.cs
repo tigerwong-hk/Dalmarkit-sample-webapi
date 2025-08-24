@@ -18,7 +18,7 @@ public interface IDalmarkitSampleQueryService
 
     Task<Result<IEnumerable<DependentEntityOutputDto>, ErrorDetail>> GetDependentEntitiesAsync(GetDependentEntitiesInputDto inputDto, CancellationToken cancellationToken = default);
 
-    Task<Result<GetNonFungiblePositionManagerPositionsOutputDto, ErrorDetail>> GetNonFungiblePositionManagerPositionsAsync(GetNonFungiblePositionManagerPositionsInputDto inputDto, CancellationToken cancellationToken = default);
+    Task<Result<GetNonFungiblePositionManagerPositionsOutputDto?, ErrorDetail>> GetNonFungiblePositionManagerPositionsAsync(GetNonFungiblePositionManagerPositionsInputDto inputDto, CancellationToken cancellationToken = default);
 
     Task<Result<EvmEventInfoOutputDto, ErrorDetail>> GetEvmEventInfoAsync(GetEvmEventInfoInputDto inputDto, CancellationToken cancellationToken = default);
 

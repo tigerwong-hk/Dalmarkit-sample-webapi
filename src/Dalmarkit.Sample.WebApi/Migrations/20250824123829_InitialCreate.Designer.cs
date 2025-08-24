@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Dalmarkit.Sample.WebApi.Migrations
 {
     [DbContext(typeof(DalmarkitSampleDbContext))]
-    [Migration("20250610082241_InitialCreate")]
+    [Migration("20250824123829_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -184,7 +184,7 @@ namespace Dalmarkit.Sample.WebApi.Migrations
                         .HasColumnType("uuid")
                         .HasDefaultValueSql("gen_random_uuid()");
 
-                    b.Property<string>("ClientId")
+                    b.Property<string>("AppClientId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -227,7 +227,7 @@ namespace Dalmarkit.Sample.WebApi.Migrations
 
                     b.HasKey("DependentEntityId");
 
-                    b.HasIndex("ClientId");
+                    b.HasIndex("AppClientId");
 
                     b.HasIndex("CreatedOn");
 
@@ -243,7 +243,7 @@ namespace Dalmarkit.Sample.WebApi.Migrations
                         .IsUnique()
                         .HasFilter("\"IsDeleted\" = false");
 
-                    b.HasIndex("CreateRequestId", "ClientId", "EntityHash")
+                    b.HasIndex("CreateRequestId", "AppClientId", "EntityHash")
                         .IsUnique();
 
                     b.ToTable("DependentEntities");
@@ -256,7 +256,7 @@ namespace Dalmarkit.Sample.WebApi.Migrations
                         .HasColumnType("uuid")
                         .HasDefaultValueSql("gen_random_uuid()");
 
-                    b.Property<string>("ClientId")
+                    b.Property<string>("AppClientId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -292,7 +292,7 @@ namespace Dalmarkit.Sample.WebApi.Migrations
 
                     b.HasKey("EntityId");
 
-                    b.HasIndex("ClientId");
+                    b.HasIndex("AppClientId");
 
                     b.HasIndex("CreatedOn");
 
@@ -306,7 +306,7 @@ namespace Dalmarkit.Sample.WebApi.Migrations
 
                     b.HasIndex("ModifierId");
 
-                    b.HasIndex("CreateRequestId", "ClientId")
+                    b.HasIndex("CreateRequestId", "AppClientId")
                         .IsUnique();
 
                     b.ToTable("Entities");
@@ -319,7 +319,7 @@ namespace Dalmarkit.Sample.WebApi.Migrations
                         .HasColumnType("uuid")
                         .HasDefaultValueSql("gen_random_uuid()");
 
-                    b.Property<string>("ClientId")
+                    b.Property<string>("AppClientId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -362,7 +362,7 @@ namespace Dalmarkit.Sample.WebApi.Migrations
 
                     b.HasKey("EntityImageId");
 
-                    b.HasIndex("ClientId");
+                    b.HasIndex("AppClientId");
 
                     b.HasIndex("CreatedOn");
 
@@ -374,7 +374,7 @@ namespace Dalmarkit.Sample.WebApi.Migrations
 
                     b.HasIndex("ModifierId");
 
-                    b.HasIndex("CreateRequestId", "ClientId")
+                    b.HasIndex("CreateRequestId", "AppClientId")
                         .IsUnique();
 
                     b.HasIndex("ObjectName", "EntityId")
@@ -391,14 +391,14 @@ namespace Dalmarkit.Sample.WebApi.Migrations
                         .HasColumnType("uuid")
                         .HasDefaultValueSql("gen_random_uuid()");
 
+                    b.Property<string>("AppClientId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("BlockchainNetwork")
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
-
-                    b.Property<string>("ClientId")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<string>("ContractAddress")
                         .IsRequired()
@@ -431,13 +431,13 @@ namespace Dalmarkit.Sample.WebApi.Migrations
 
                     b.HasKey("EvmEventId");
 
-                    b.HasIndex("ClientId");
+                    b.HasIndex("AppClientId");
 
                     b.HasIndex("CreatedOn");
 
                     b.HasIndex("CreatorId");
 
-                    b.HasIndex("CreateRequestId", "ClientId")
+                    b.HasIndex("CreateRequestId", "AppClientId")
                         .IsUnique();
 
                     b.ToTable("EvmEvents");

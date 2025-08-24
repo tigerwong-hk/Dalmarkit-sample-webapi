@@ -1,4 +1,3 @@
-using AutoMapper.Configuration.Annotations;
 using Dalmarkit.Common.Entities.BaseEntities;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
@@ -9,12 +8,10 @@ public class EntityImage : StorageObjectEntityBase
 {
     [Key]
     [Required]
-    [Ignore]
     public Guid EntityImageId { get; set; }
 
     #region Foreign Key
     [Required]
-    [Ignore]
     public Guid EntityId { get; set; }
     #endregion Foreign Key
 

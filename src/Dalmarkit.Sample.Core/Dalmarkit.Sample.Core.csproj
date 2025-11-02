@@ -10,10 +10,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Dalmarkit.AspNetCore" Version="0.6.3" />
-    <PackageReference Include="Dalmarkit.Blockchain" Version="0.6.3" />
+    <PackageReference Include="Dalmarkit.AspNetCore" Version="0.6.4" />
+    <PackageReference Include="Dalmarkit.Blockchain" Version="0.6.4" />
     <PackageReference Include="FluentValidation" Version="12.0.0" />
-    <PackageReference Include="Roslynator.Analyzers" Version="4.13.1">
+    <PackageReference Include="Roslynator.Analyzers" Version="4.14.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>

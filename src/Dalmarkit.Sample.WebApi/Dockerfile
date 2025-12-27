@@ -5,7 +5,7 @@ ARG WORK_DIR="/opt/${APP_NAME}"
 
 #
 # Build
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 
 ARG RELEASE_PROJECT_RELATIVE_PATH
 ARG WORK_DIR
@@ -38,14 +38,14 @@ RUN : \
 
 #
 # Deploy
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
+FROM mcr.microsoft.com/dotnet/aspnet:10.0
 
 ARG RELEASE_PROJECT_NAME
 ARG RELEASE_PROJECT_RELATIVE_PATH
 ARG WORK_DIR
 
 RUN groupadd -r default && useradd -r -g default default
-COPY --chown=default:default --from=build "${WORK_DIR}/${RELEASE_PROJECT_RELATIVE_PATH}/bin/Release/net8.0/publish/" "${WORK_DIR}"
+COPY --chown=default:default --from=build "${WORK_DIR}/${RELEASE_PROJECT_RELATIVE_PATH}/bin/Release/net10.0/publish/" "${WORK_DIR}"
 
 WORKDIR "${WORK_DIR}"
 

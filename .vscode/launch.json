@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/src/Dalmarkit.Sample.WebApi/bin/Debug/net8.0/Dalmarkit.Sample.WebApi.dll",
+            "program": "${workspaceFolder}/src/Dalmarkit.Sample.WebApi/bin/Debug/net10.0/Dalmarkit.Sample.WebApi.dll",
             "args": [],
             "cwd": "${workspaceFolder}/src/Dalmarkit.Sample.WebApi",
             "stopAtEntry": false,

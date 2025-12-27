@@ -19,7 +19,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Serilog;
 using System.Globalization;
 using System.Net;
@@ -225,7 +225,7 @@ try
                     string[] args = network.Split('/', 2);
                     if (args.Length == 2)
                     {
-                        options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(IPAddress.Parse(args[0]), int.Parse(args[1], NumberStyles.None, CultureInfo.InvariantCulture)));
+                        options.KnownIPNetworks.Add(new System.Net.IPNetwork(IPAddress.Parse(args[0]), int.Parse(args[1], NumberStyles.None, CultureInfo.InvariantCulture)));
                     }
                 }
             }
@@ -270,21 +270,16 @@ try
         options.SwaggerDoc("v1", new OpenApiInfo { Title = "Cognito Secured API", Version = "v1" });
         options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
         {
-            Scheme = JwtBearerDefaults.AuthenticationScheme,
             Type = SecuritySchemeType.Http,
-            BearerFormat = "JWT"
+            Scheme = JwtBearerDefaults.AuthenticationScheme,
+            BearerFormat = "JWT",
+            Description = "JWT Authorization header using the Bearer scheme."
         });
-        options.AddSecurityRequirement(new OpenApiSecurityRequirement
+        options.AddSecurityRequirement((document) => new OpenApiSecurityRequirement()
         {
-            {
-                new OpenApiSecurityScheme
-                {
-                    Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = JwtBearerDefaults.AuthenticationScheme }
-                },
-                Array.Empty<string>()
-            }
+            [new OpenApiSecuritySchemeReference(JwtBearerDefaults.AuthenticationScheme, document)] = []
         });
-        options.MapType<BigInteger>(() => new OpenApiSchema { Type = "string" });
+        options.MapType<BigInteger>(() => new OpenApiSchema { Type = JsonSchemaType.String });
     });
 
     WebApplication app = builder.Build();

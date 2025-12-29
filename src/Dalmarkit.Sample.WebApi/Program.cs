@@ -69,7 +69,7 @@ try
     _ = builder.Services.AddDbContext<DalmarkitSampleDbContext>(options =>
         _ = options.UseNpgsql(databaseConnectionString, options => options.MigrationsAssembly(typeof(Program).Assembly.FullName)));
 
-    _ = builder.Services.AddAuditTrail<DalmarkitSampleDbContext>(databaseConnectionString!);
+    _ = builder.Services.AddAuditTrail<DalmarkitSampleDbContext>(databaseConnectionString!, options => options.UseNpgsql(databaseConnectionString));
 
     _ = builder.Services.AddHttpContextAccessor();
 

@@ -6,8 +6,8 @@
 
   <ItemGroup>
     <PackageReference Include="Audit.EntityFramework.Core" Version="31.3.2" />
-    <PackageReference Include="Dalmarkit.Blockchain" Version="0.7.0-alpha.57" />
-    <PackageReference Include="Dalmarkit.EntityFrameworkCore" Version="0.7.0-alpha.57" />
+    <PackageReference Include="Dalmarkit.Blockchain" Version="0.8.0-alpha.74" />
+    <PackageReference Include="Dalmarkit.EntityFrameworkCore" Version="0.8.0-alpha.74" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.1" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0" />

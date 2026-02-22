@@ -186,7 +186,7 @@ CREATE INDEX "IX_EvmEvents_CreatedOn" ON "EvmEvents" ("CreatedOn");
 CREATE INDEX "IX_EvmEvents_CreatorId" ON "EvmEvents" ("CreatorId");
 
 INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-VALUES ('20251226013600_InitialCreate', '10.0.1');
+VALUES ('20260222181636_InitialCreate', '10.0.3');
 
 COMMIT;
 

@@ -6,11 +6,11 @@
 
   <ItemGroup>
     <PackageReference Include="Audit.EntityFramework.Core" Version="32.0.0" />
-    <PackageReference Include="Dalmarkit.Blockchain" Version="0.8.1" />
-    <PackageReference Include="Dalmarkit.EntityFrameworkCore" Version="0.8.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.4" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0" />
+    <PackageReference Include="Dalmarkit.Blockchain" Version="0.8.3" />
+    <PackageReference Include="Dalmarkit.EntityFrameworkCore" Version="0.8.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.5" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.1" />
     <PackageReference Include="Roslynator.Analyzers" Version="4.15.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>

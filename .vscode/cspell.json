@@ -27,6 +27,7 @@
         "reportgenerator",
         "riok",
         "roslynator",
+        "sasl",
         "serilog",
         "softprops",
         "swashbuckle",

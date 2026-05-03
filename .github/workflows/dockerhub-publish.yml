@@ -13,11 +13,11 @@ jobs:
     steps:
       - name: Only for main or develop branch
         if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop' }}
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: core.setFailed('Invalid branch - ${{ github.ref }}')
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
@@ -38,6 +38,6 @@ jobs:
         run: docker push -a "${{ vars.DOCKERHUB_NAMESPACE }}/${{ vars.DOCKERHUB_REPOSITORY_NAME }}"
       - name: Release for main branch
         if: ${{ github.ref == 'refs/heads/main' }}
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: "${{ steps.build-docker-image.outputs.docker_image_tag }}"

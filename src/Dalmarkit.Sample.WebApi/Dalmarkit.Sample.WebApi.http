@@ -728,7 +728,7 @@ Authorization: Bearer {{tenantAdmin02AccessToken}}
 ###### DeleteDependentEntities
 
 # @name DeleteDependentEntitiesAsAnonymousUnauthorized
-POST {{apiUrl}}/DeleteDependentEntities
+DELETE {{apiUrl}}/DeleteDependentEntities
 Content-Type: application/json
 
 {
@@ -743,7 +743,7 @@ Content-Type: application/json
 ###
 
 # @name DeleteDependentEntitiesAsBackofficeAdminSuccess
-POST {{apiUrl}}/DeleteDependentEntities
+DELETE {{apiUrl}}/DeleteDependentEntities
 Content-Type: application/json
 Authorization: Bearer {{backofficeAdminAccessToken}}
 
@@ -759,7 +759,7 @@ Authorization: Bearer {{backofficeAdminAccessToken}}
 ###
 
 # @name DeleteDependentEntitiesAsTenantAdmin01Forbidden
-POST {{apiUrl}}/DeleteDependentEntities
+DELETE {{apiUrl}}/DeleteDependentEntities
 Content-Type: application/json
 Authorization: Bearer {{tenantAdmin01AccessToken}}
 
@@ -775,7 +775,7 @@ Authorization: Bearer {{tenantAdmin01AccessToken}}
 ###
 
 # @name DeleteDependentEntitiesAsTenantAdmin02Forbidden
-POST {{apiUrl}}/DeleteDependentEntities
+DELETE {{apiUrl}}/DeleteDependentEntities
 Content-Type: application/json
 Authorization: Bearer {{tenantAdmin02AccessToken}}
 

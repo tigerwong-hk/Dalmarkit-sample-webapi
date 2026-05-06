@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <PackageReference Include="Amazon.Extensions.Configuration.SystemsManager" Version="7.1.0" />
-    <PackageReference Include="Dalmarkit.AspNetCore" Version="0.9.1" />
+    <PackageReference Include="Dalmarkit.AspNetCore" Version="0.9.2-alpha.119" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.7">
